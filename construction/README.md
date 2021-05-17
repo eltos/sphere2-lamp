@@ -1,0 +1,3 @@
+# Sphere² Lamp – Instructions
+
+Instructions for constructing the Sphere² Lamp will follow soon...
