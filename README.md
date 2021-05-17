@@ -6,7 +6,7 @@ Using animated color effects, the lamp creates a unique atmosphere.
 
 ## Arduino code
 
-The code for Arduino can be found in the [sphere2-lamp](sphere2-lamp/sphere2-lamp.ino) folder.
+The code for Arduino can be found in the [arduino](arduino/sphere2-lamp/sphere2-lamp.ino) folder.
 
 ## Instructions
 
