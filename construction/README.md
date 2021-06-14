@@ -81,7 +81,7 @@ This will help positioning and gluing the balls later.
 Number the LED positions as shown below, corresponding to the indices used in the code.
 This is important to connect the LEDs in the correct order.
 
-An interactive 3D model that helps with the assignment is provided in the Jupyter Notebook [spherical_geometry.ipynb](spherical_geometry.ipynb) or alternatively at [glowscript.org](https://www.glowscript.org/#/user/eltos/folder/MyPrograms/program/Sphere2-lamp).
+An interactive 3D model that helps with the assignment is provided in the Jupyter Notebook [spherical_geometry.ipynb](spherical_geometry.ipynb) or alternatively [online](https://www.glowscript.org/#/user/eltos/folder/MyPrograms/program/Sphere2-lamp).
 
 ![](images/numbering_top_front.png)
 ![](images/numbering_top_back.png)  
