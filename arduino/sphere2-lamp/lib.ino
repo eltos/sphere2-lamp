@@ -42,7 +42,7 @@ static uint8_t absdiff8(uint8_t a, uint8_t b){
  * @param x: the argument where -1 <= x <= 1
  * @return: the arccos(x) in range 0 <= arccos(x) < pi
  */
-float acos(float x) {  
+float acosfast(float x) {  
   bool negate = x < 0;
   x = abs(x);
   float ret = -0.0187293;
@@ -74,7 +74,7 @@ static uint8_t distance(uint8_t theta1, uint8_t phi1, uint8_t theta2, uint8_t ph
   v *= sin16(128*theta1);               // cos(lat(theta1))
   v *= sin16(128*theta2);               // cos(lat(theta2))
   v *= cos16(256*absdiff8(phi1, phi2)); // cos(lon(abs(phi1-phi2)))
-  return acos((u-v/32767)/1073741824)*81.2 + 0.5;
+  return acosfast((u-v/32767)/1073741824)*81.2 + 0.5;
 }
 
 

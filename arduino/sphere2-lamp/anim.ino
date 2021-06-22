@@ -82,7 +82,7 @@ uint8_t* build_hue_map(size_t* led_map, bool skip_zero = false, uint8_t hue_star
   num_hues++;
   // create equally distributed hue map
   uint8_t *hue_map = (uint8_t *) malloc(num_hues*sizeof(uint8_t));
-  if (hue_map == NULL){ return; } // out of RAM
+  if (hue_map == NULL){ return NULL; } // out of RAM
   if (skip_zero){
     hue_map[0] = 0;
     num_hues--;
@@ -115,7 +115,7 @@ void fill_map(size_t* led_map = MAP_PENTAGON, CRGB* map_colors = MAP_RGB_COLORS)
  */
 void fill_submap(size_t* led_map, size_t number, CRGB color){
   for (size_t i = 0; i < NUM_LEDS; ++i){
-    if (led_map[i] != number) continue;
+    if (led_map[i] != number){ continue; }
     leds[i] = color;
   }
 }
