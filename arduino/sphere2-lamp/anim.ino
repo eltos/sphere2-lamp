@@ -12,10 +12,11 @@ CRGBPalette16 defaultPalette = RainbowColors_p;
 /**
  * Function macros producing continuous linear/triangular/sinusoidal/quadratric sweeps with given BPM
  */
-# define SAWTOOTH [](accum88 bpm){return beat8(bpm);}               // sawtooth
-# define TRIANGULAR [](accum88 bpm){return triwave8(beat8(bpm));}   // triangular
-# define SINUSOIDAL [](accum88 bpm){return beatsin8(bpm);}          // sinusoidal
-# define QUADWAVE [](accum88 bpm){return quadwave8(beat8(bpm));}    // quadratic sinusoidal (spends just a little more time at the limits)
+#define SAWTOOTH [](accum88 bpm){return beat8(bpm);}               // sawtooth
+#define SAWTOOTH_REVERSE [](accum88 bpm){return 255-beat8(bpm);}   // reverse sawtooth
+#define TRIANGULAR [](accum88 bpm){return triwave8(beat8(bpm));}   // triangular
+#define SINUSOIDAL [](accum88 bpm){return beatsin8(bpm);}          // sinusoidal
+#define QUADWAVE [](accum88 bpm){return quadwave8(beat8(bpm));}    // quadratic sinusoidal (spends just a little more time at the limits)
 
 /**
  * Gradient function producing flashes for a linear input

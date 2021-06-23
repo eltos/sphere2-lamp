@@ -9,7 +9,7 @@
  */
 
 /* Configuration */
-#define DATA_PIN    6
+#define DATA_PIN    11
 #define POWER       5*5000   // in mW
 #define BRIGHTNESS  200
 #define LED_TYPE    NEOPIXEL
@@ -32,23 +32,7 @@ void setup() {
   FastLED.setMaxPowerInMilliWatts(POWER);
   FastLED.clear();
 
-  Serial.begin(9600);
-}
+  setup_serial();
 
-
-/**
- * Print number of animation frames per second (FPS) to serial
- */
-void serial_print_fps(){
-  static uint16_t fps = 0;
-  static bool init = false; // skip first execution
-  fps++;
-  EVERY_N_MILLISECONDS( 10000 ) {
-    if (init){
-      Serial.print("FPS: ");
-      Serial.println(fps/10.);
-    }
-    init = true;
-    fps = 0;
-  }
+  pinMode(LED_BUILTIN, OUTPUT);
 }
