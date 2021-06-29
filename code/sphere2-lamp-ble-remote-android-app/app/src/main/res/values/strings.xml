@@ -2,11 +2,56 @@
     <string name="app_name">Sphere² Lamp</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="dashboard">Dashboard</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="connect">Connect</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="bluetooth_not_supported">Bluetooth not supported</string>
+    <string name="select_bluetooth_device">Select bluetooth device</string>
+    <string name="scan_again">Rescan</string>
+    <string name="permission_required">Permission required</string>
+    <string name="explain_permissions">You must grant the bluetooth permission to connect.\nYou must also grant the location permission to be able to search for and discover nearby bluetooth devices. You location will not be evaluated.</string>
+    <string name="settings">Settings</string>
+    <string name="no_devices">No devices</string>
+    <string name="unknown">Unknown</string>
+    <string name="device_not_supported">Device not supported</string>
+    <string name="failed_to_set_value">Failed to set value</string>
+    
+    
+    <string name="switch_on_off">ON/OFF</string>
+    <string name="brightness">Brightness</string>
+    <string name="bpm">Animation speed in BPM</string>
+    <string name="mode">Mode</string>
+    <string name="mode_manual">Manual</string>
+    <string name="mode_anim_map">Pattern map animation</string>
+    <string name="mode_anim_rotating_gradient">Rotating gradient animation</string>
+    <string name="mode_anim_polar_gradient">Polar angle gradient animation</string>
+    <string name="mode_anim_azimuth_gradient">Azimuth angle gradient animation</string>
+    <string name="color_palette">Color palette</string>
+    <string name="palette_rainbow">Rainbow</string>
+    <string name="palette_red_stripe">Red stripe</string>
+    <string name="palette_party">Party colors</string>
+    <string name="set">Set</string>
+    <string name="dashboard_updated">Dashboard updated</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="connection_failed">Connection failed</string>
+    <string name="invalid_format">Invalid format</string>
+    <string name="not_in_range_0_255">Not in range 0 to 255</string>
+    <string name="time_function_sawtooth">Sawtooth</string>
+    <string name="time_function_sawtooth_reverse">Reverse sawtooth</string>
+    <string name="time_function_triangular">Triangular</string>
+    <string name="time_function_sinusoidal">Sinusoidal</string>
+    <string name="time_function_quadwave">Quadwave</string>
+    <string name="time_function">Time function</string>
+    <string name="stop">Stop</string>
+    <string name="scan">Scan</string>
+    <string name="select">Select</string>
+    <string name="mode_solid">Uniform color</string>
+    <string name="mode_anim_solid">Uniform animation</string>
+    <string name="color">Color</string>
+
 </resources>
