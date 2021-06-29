@@ -5,17 +5,24 @@
 // i/O pins
 #define LED_BLUE 24              // onboard led to indicate BLE status (on = LOW)
 
-// Use "Serial" for USB, "Serial1" for 3.3V RX TX pins
-#define SERIAL Serial1
 
-
+/* Swich lamp off. Payload: [] */
 #define ACTION_OFF 0
+/* Swich lamp on. Payload: [] */
 #define ACTION_ON 1
+/* Set overall brightness. Payload: [uint8_t brightness] */
 #define ACTION_BRIGHTNESS 2
+/* Set mode. Payload: [uint8_t mode_constant] (see main for list of modes) */
 #define ACTION_MODE 10
+/* Set animation speed in bpm. Payload: [uint8_t bpm] */
 #define ACTION_BPM 11
+/* Set color palette. Payload: [uint8_t palette_constant] (see main for list of palettes)*/
 #define ACTION_PALETTE 12
+/* Set time interpolation function. Payload: [uint8_t function_constant] (see main for list of functions) */
 #define ACTION_TIME_FUNCTION 13
+/* Set a color. Payload: [uint8_t 0_or_1, r_or_h, g_or_s, b_or_v] */
+#define ACTION_COLOR 14
+/* Set led color manually. Payload: (see below) */
 #define ACTION_SET_LED 101
 #define ACTION_SET_ALL 102
 
@@ -32,6 +39,7 @@ BLEByteCharacteristic cMode            ("19B10010-E8F2-517E-4F6C-D104768A1214", 
 BLEByteCharacteristic cBpm             ("19B10011-E8F2-517E-4F6C-D104768A1214", BLERead | BLEWrite);
 BLEByteCharacteristic cPalette         ("19B10012-E8F2-517E-4F6C-D104768A1214", BLERead | BLEWrite);
 BLEByteCharacteristic cTimeFunction    ("19B10013-E8F2-517E-4F6C-D104768A1214", BLERead | BLEWrite);
+BLECharacteristic     cColor           ("19B10014-E8F2-517E-4F6C-D104768A1214", BLERead | BLEWrite, 4, true);
 BLECharacteristic     cSetLed          ("19B10101-E8F2-517E-4F6C-D104768A1214", BLERead | BLEWrite, /*valueSize*/5, /*fixedLength*/true);
 BLECharacteristic     cSetAll          ("19B10102-E8F2-517E-4F6C-D104768A1214", BLERead | BLEWrite, 3*NUM_LEDS); // max 512
 
@@ -44,6 +52,7 @@ void setupCharacteristics(){
   bleService.addCharacteristic(cMode);                 cMode.setEventHandler(BLEWritten, actionCallback<ACTION_MODE>);
   bleService.addCharacteristic(cPalette);           cPalette.setEventHandler(BLEWritten, actionCallback<ACTION_PALETTE>);
   bleService.addCharacteristic(cTimeFunction); cTimeFunction.setEventHandler(BLEWritten, actionCallback<ACTION_TIME_FUNCTION>);
+  bleService.addCharacteristic(cColor);               cColor.setEventHandler(BLEWritten, actionCallback<ACTION_COLOR>);
   bleService.addCharacteristic(cSetLed);             cSetLed.setEventHandler(BLEWritten, actionCallback<ACTION_SET_LED>);
   bleService.addCharacteristic(cSetAll);             cSetAll.setEventHandler(BLEWritten, actionCallback<ACTION_SET_ALL>);
 }
@@ -51,7 +60,7 @@ void setupCharacteristics(){
 
 
 void setup() {
-  SERIAL.begin(9600);
+  Serial1.begin(9600);
 
   // set pin modes
   pinMode(LED_BLUE, OUTPUT);
@@ -102,15 +111,11 @@ void loop() {
 void blePeripheralConnectHandler(BLEDevice central) {
   // central connected event handler
   BLE.stopAdvertise();
-  //Serial.print("Connected event, central: ");
-  //Serial.println(central.address());
 }
 
 void blePeripheralDisconnectHandler(BLEDevice central) {
   // central disconnected event handler
   BLE.advertise();
-  //Serial.print("Disconnected event, central: ");
-  //Serial.println(central.address());
 }
 
 
@@ -119,10 +124,10 @@ void blePeripheralDisconnectHandler(BLEDevice central) {
  * Communication with sphere2lamp
  */
 void send_action(uint8_t action, uint8_t* data = NULL, size_t len = 0){
-  SERIAL.write(action);
+  Serial1.write(action);
   uint8_t answer;
-  if (SERIAL.readBytes(&answer, 1) == 1 && answer == action && len > 0){
-    SERIAL.write(data, len);
+  if (Serial1.readBytes(&answer, 1) == 1 && answer == action && len > 0){
+    Serial1.write(data, len);
   }
 }
 
@@ -131,7 +136,7 @@ void send_action(uint8_t action, uint8_t* data = NULL, size_t len = 0){
  */
 template <uint8_t ACTION>
 void actionCallback(BLEDevice central, BLECharacteristic characteristic) {
-  send_action(ACTION, (uint8_t*) characteristic.value(), characteristic.valueSize());
+  send_action(ACTION, (uint8_t*) characteristic.value(), characteristic.valueLength());
 }
 
 /**

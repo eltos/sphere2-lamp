@@ -15,12 +15,15 @@ ACTION_MODE = 10
 ACTION_BPM = 11
 ACTION_PALETTE = 12
 ACTION_TIME_FUNCTION = 13
+ACTION_COLOR = 14
 ACTION_SET_LED = 101
 ACTION_SET_ALL = 102
 
 # mode bytes
 MODE_MANUAL = 0
+MODE_SOLID = 1
 MODE_ANIM_MAP = 2
+MODE_ANIM_SOLID = 3
 MODE_ANIM_ROTATING_GRADIENT = 15
 MODE_ANIM_POLAR_GRADIENT = 16
 MODE_ANIM_AZIMUTH_GRADIENT = 17
@@ -36,6 +39,7 @@ TIME_FUNCTION_SAWTOOTH_REVERSE = 1
 TIME_FUNCTION_TRIANGULAR = 2
 TIME_FUNCTION_SINUSOIDAL = 3
 TIME_FUNCTION_QUADWAVE = 4
+
 
 
 
@@ -87,7 +91,7 @@ class Sphere2lamp:
     
     def mode(self, value):
         """Set the mode
-        :param value: mode byte
+        :param value: one of the MODE_* constants
         """
         self._send(ACTION_MODE, value)
     
@@ -99,13 +103,29 @@ class Sphere2lamp:
 
     def palette(self, value):
         """Set the color palette
-        :param value: palette byte
+        :param value: one of the PALETTE_* constants
         """
         self._send(ACTION_PALETTE, value)
+    
+    def color_rgb(self, r, g, b):
+        """Set the color as RGB
+        :param r: red color component (0..255)
+        :param g: green color component (0..255)
+        :param b: blue color component (0..255)
+        """
+        self._send(ACTION_COLOR, 0, r, g, b) 
+    
+    def color_hsv(self, h, s, v):
+        """Set the color as HSV
+        :param h: color hue (0..255)
+        :param s: color saturation (0..255)
+        :param v: color value (0..255)
+        """
+        self._send(ACTION_COLOR, 1, h, s, v) 
 
     def time_function(self, value):
         """Set the time function
-        :param value: time function byte
+        :param value: one of the TIME_FUNCTION_* constants
         """
         self._send(ACTION_TIME_FUNCTION, value)
 
@@ -132,6 +152,9 @@ class Sphere2lamp:
         :param rgbrgbrgb: LED colors as RGB (r1,g1,b1, r2,g2,b2, ...) each in range (0..255)
         """
         self._send(ACTION_SET_ALL, *rgbrgbrgb)
+
+
+
 
 
 
