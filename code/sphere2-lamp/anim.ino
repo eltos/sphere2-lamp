@@ -3,9 +3,40 @@
  * 
  */
 
-
-// Default palette
+/** 
+ * Color palettes
+ * (16 colors indexed as 0..255, must include both endpoints)
+ * pre-defined palettes (http://fastled.io/docs/3.1/group___colorpalletes.html):
+ *     RainbowColors_p, RainbowStripeColors_p, OceanColors_p, CloudColors_p, LavaColors_p, ForestColors_p, PartyColors_p
+ */
 CRGBPalette16 defaultPalette = RainbowColors_p;
+ 
+DEFINE_GRADIENT_PALETTE( red_stripe_p ) {
+    0,   0,  0,  0,   //black
+  108,   0,  0,  0,   //black
+  128, 255,  0,  0,   //red
+  148,   0,  0,  0,   //black
+  255,   0,  0,  0};  //black
+
+DEFINE_GRADIENT_PALETTE( four_p ) {
+    0, 255,  0,  0,   //
+   63,   0,  0,  0,   //
+   64, 255,  0,  0,   //
+  127,   0,  0,  0,   //
+  128, 255,  0,  0,   //
+  191,   0,  0,  0,   //
+  192, 255,255,255,   //
+  255,   0,  0,  0};  //black
+
+DEFINE_GRADIENT_PALETTE( dark_ocean_p ) {
+    0,   9,  95, 184,
+   55,  58, 114, 189,
+  105,  12, 178, 183,
+  140,  24, 110,  95,
+  190,  35,  34, 188,
+  230,  24, 102, 220,
+  255,   9,  95, 184};
+  
 
 
 
@@ -13,7 +44,7 @@ CRGBPalette16 defaultPalette = RainbowColors_p;
  * Function macros producing continuous linear/triangular/sinusoidal/quadratric sweeps with given BPM
  */
 #define SAWTOOTH [](accum88 bpm){return beat8(bpm);}               // sawtooth
-#define SAWTOOTH_REVERSE [](accum88 bpm){return 255-beat8(bpm);}   // reverse sawtooth
+#define SAWTOOTH_REVERSE [](accum88 bpm){return (uint8_t)(255-beat8(bpm));}   // reverse sawtooth
 #define TRIANGULAR [](accum88 bpm){return triwave8(beat8(bpm));}   // triangular
 #define SINUSOIDAL [](accum88 bpm){return beatsin8(bpm);}          // sinusoidal
 #define QUADWAVE [](accum88 bpm){return quadwave8(beat8(bpm));}    // quadratic sinusoidal (spends just a little more time at the limits)
@@ -172,6 +203,24 @@ void anim_submap(size_t* led_map, size_t number, uint8_t bpm = 10, CRGBPalette16
     uint8_t hue = function8(bpm);
     leds[i] = ColorFromPalette(*palette, hue, brightness, blending);
   }
+}
+
+
+/**
+ * Animate solid LED color
+ * 
+ * @param bpm: hue shift animation speed in cycles (beats) per minute
+ * @param palette: color palette to map distances to color
+ * @param function8: function to calculate color palette hue shift as function of bpm and time
+ * @param brightness: LED brightness
+ * @param blending: blending type for color palette
+ */
+template <typename F = uint8_t(accum88)>
+void anim_solid(uint8_t bpm = 10, CRGBPalette16* palette = &defaultPalette, F function8 = SAWTOOTH,
+                uint8_t brightness = 255, TBlendType blending = LINEARBLEND){
+  uint8_t hue = function8(bpm);
+  CRGB color = ColorFromPalette(*palette, hue, brightness, blending);
+  fill_solid(leds, NUM_LEDS, color);
 }
 
 
