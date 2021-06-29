@@ -6,7 +6,7 @@ It can be controlled over USB or bluetooth.
 
 ### Instructions
 
-Instructions on how to build the lamp can be found in the [construction](construction/README.md) folder.
+Instructions on how to build the lamp can be found in the [instructions](instructions) folder.
 
 
 ### Code
