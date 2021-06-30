@@ -26,6 +26,12 @@
 #define TIME_FUNCTION_SINUSOIDAL 3
 #define TIME_FUNCTION_QUADWAVE 4
 
+#define LED_MAP_PENTAGON 0
+#define LED_MAP_HEART 1
+#define LED_MAP_KRAKEN 2
+#define LED_MAP_KRAKEN_BG 3
+#define LED_MAP_SNAKE 4
+
 
 /**
  * Persistent lamp state
@@ -33,16 +39,19 @@
 struct LampState {
   bool on = true;
   uint8_t brightness = 200;
-  uint8_t mode = MODE_ANIM_ROTATING_GRADIENT;
+  uint8_t mode = MODE_ANIM_MAP;//MODE_ANIM_ROTATING_GRADIENT;
   uint8_t bpm = 30;
   uint8_t time_function = TIME_FUNCTION_SAWTOOTH;
   uint8_t palette = PALETTE_DEFAULT_RAINBOW;
+  uint8_t led_map = LED_MAP_PENTAGON;
   CRGB color = CRGB::White; // uint8_t color[3] = {255,255,255};
 } state;
 
 // Runtime variables derived from state constants
 CRGBPalette16 palette_p = RainbowColors_p;
 uint8_t(*time_function_p)(accum88) = SAWTOOTH;
+uint8_t led_map_p[NUM_LEDS];
+bool led_map_bg_color = false;
 
 /**
  * Method to update run time settings from state
@@ -68,6 +77,15 @@ void stateChanged(){
     case PALETTE_DEFAULT_RAINBOW:           palette_p = RainbowColors_p;  break;
     case PALETTE_RED_STRIPE:                palette_p = red_stripe_p;     break;
     case PALETTE_PARTY:                     palette_p = PartyColors_p;    break;
+  }
+  // led map
+  switch (state.led_map){
+    default:
+    case LED_MAP_PENTAGON:      led_map_bg_color = false; memcpy_P(led_map_p, MAP_PENTAGON,   NUM_LEDS); break;
+    case LED_MAP_HEART:         led_map_bg_color = true;  memcpy_P(led_map_p, MAP_HEART,      NUM_LEDS); break;
+    case LED_MAP_KRAKEN:        led_map_bg_color = false; memcpy_P(led_map_p, MAP_KRAKEN,     NUM_LEDS); break;
+    case LED_MAP_KRAKEN_BG:     led_map_bg_color = true;  memcpy_P(led_map_p, MAP_KRAKEN,     NUM_LEDS); break;
+    case LED_MAP_SNAKE:         led_map_bg_color = true;  memcpy_P(led_map_p, MAP_SNAKE,      NUM_LEDS); break;
   }
         
   // save state to EEPROM
@@ -95,6 +113,7 @@ void recoverState(){
  */
 void loop(){
 
+
   if (state.on){ // Lamp ON
     digitalWrite(LED_BUILTIN, HIGH);
 
@@ -113,7 +132,8 @@ void loop(){
 
       // animations based on LED texture map
       case MODE_ANIM_MAP:
-        anim_map(MAP_PENTAGON, state.bpm, &palette_p, time_function_p);
+        anim_map(led_map_p, state.bpm, &palette_p, time_function_p, 255, LINEARBLEND, led_map_bg_color);
+        if (led_map_bg_color) fill_submap(led_map_p, 0, state.color);
         break;
 
       // rotating rainbow gradients

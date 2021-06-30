@@ -84,17 +84,17 @@ uint8_t blink(uint8_t x, uint8_t flashes){
 /**
  * Predefined maps mapping the LED number (index) to a certain color/hue.
  */
-static size_t MAP_PENTAGON[NUM_LEDS] = {0,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,1,2,1,0,1,2,1,0,1,2,1,0,1,2,1,0,1,2,1,0,1,2,1,1,1,2,1,1,1,2,1,1,1,2,1,1,1,2,1,1,2,2,2,2,2,2,2,2,2,2,2,1,1,1,2,1,1,1,2,1,1,1,2,1,1,1,2,1,1,1,2,1,0,1,2,1,0,1,2,1,0,1,2,1,0,1,2,1,0,1,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,0};
-static size_t MAP_HEART[NUM_LEDS] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-static size_t MAP_KRAKEN[NUM_LEDS] = {0,1,1,1,1,1,2,15,2,15,2,15,2,15,2,15,16,3,16,14,16,3,16,14,16,3,16,14,16,3,16,14,16,3,16,14,16,4,16,13,16,4,16,13,16,4,16,13,16,4,16,13,16,4,16,13,16,16,16,16,16,16,16,16,16,16,12,16,5,16,12,16,5,16,12,16,5,16,12,16,5,16,12,16,5,16,11,16,6,16,11,16,6,16,11,16,6,16,11,16,6,16,11,16,6,16,10,7,10,7,10,7,10,7,10,7,9,9,9,9,9,8};
-static size_t MAP_SNAKE[NUM_LEDS] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,13,0,4,0,3,0,44,0,43,0,34,0,33,0,24,0,23,0,14,0,12,0,5,0,2,0,45,0,42,0,35,0,32,0,25,0,22,0,15,0,11,6,1,46,41,36,31,26,21,16,0,10,0,7,0,50,0,47,0,40,0,37,0,30,0,27,0,20,0,17,0,9,0,8,0,49,0,48,0,39,0,38,0,29,0,28,0,19,0,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-static size_t MAP_EARTH[NUM_LEDS] = {2,2,2,2,2,2,1,2,2,2,3,1,4,4,1,1,1,1,3,3,3,3,3,4,3,4,1,1,1,1,4,4,3,1,1,1,1,1,1,3,3,1,4,4,4,4,4,1,1,3,3,1,1,1,1,1,1,3,1,1,3,1,3,1,1,1,1,1,3,4,1,1,1,1,3,3,1,1,3,3,3,1,1,1,1,1,1,1,4,4,4,1,1,1,3,1,1,1,1,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2};
+const uint8_t MAP_PENTAGON[NUM_LEDS] PROGMEM = {0,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,1,2,1,0,1,2,1,0,1,2,1,0,1,2,1,0,1,2,1,0,1,2,1,1,1,2,1,1,1,2,1,1,1,2,1,1,1,2,1,1,2,2,2,2,2,2,2,2,2,2,2,1,1,1,2,1,1,1,2,1,1,1,2,1,1,1,2,1,1,1,2,1,0,1,2,1,0,1,2,1,0,1,2,1,0,1,2,1,0,1,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,0};
+const uint8_t MAP_HEART[NUM_LEDS] PROGMEM = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+const uint8_t MAP_KRAKEN[NUM_LEDS] PROGMEM = {1,2,2,2,2,2,3,16,3,16,3,16,3,16,3,16,0,4,0,15,0,4,0,15,0,4,0,15,0,4,0,15,0,4,0,15,0,5,0,14,0,5,0,14,0,5,0,14,0,5,0,14,0,5,0,14,0,0,0,0,0,0,0,0,0,0,13,0,6,0,13,0,6,0,13,0,6,0,13,0,6,0,13,0,6,0,12,0,7,0,12,0,7,0,12,0,7,0,12,0,7,0,12,0,7,0,11,8,11,8,11,8,11,8,11,8,10,10,10,10,10,9};
+const uint8_t MAP_SNAKE[NUM_LEDS] PROGMEM = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,13,0,4,0,3,0,44,0,43,0,34,0,33,0,24,0,23,0,14,0,12,0,5,0,2,0,45,0,42,0,35,0,32,0,25,0,22,0,15,0,11,6,1,46,41,36,31,26,21,16,0,10,0,7,0,50,0,47,0,40,0,37,0,30,0,27,0,20,0,17,0,9,0,8,0,49,0,48,0,39,0,38,0,29,0,28,0,19,0,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+const uint8_t MAP_EARTH[NUM_LEDS] PROGMEM = {2,2,2,2,2,2,1,2,2,2,3,1,4,4,1,1,1,1,3,3,3,3,3,4,3,4,1,1,1,1,4,4,3,1,1,1,1,1,1,3,3,1,4,4,4,4,4,1,1,3,3,1,1,1,1,1,1,3,1,1,3,1,3,1,1,1,1,1,3,4,1,1,1,1,3,3,1,1,3,3,3,1,1,1,1,1,1,1,4,4,4,1,1,1,3,1,1,1,1,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2};
 
 /**
  * Predefined texture colors defining the colors
  */
-static CRGB MAP_EARTH_COLORS[5] = {CRGB(0,0,0), CRGB(0,0,200), CRGB(255,255,255), CRGB(0,200,0), CRGB(100,150,0)};
-static CRGB MAP_RGB_COLORS[3] = {CRGB::Red, CRGB::Green, CRGB::Blue};
+const CRGB MAP_EARTH_COLORS[5] = {CRGB(0,0,0), CRGB(0,0,200), CRGB(255,255,255), CRGB(0,200,0), CRGB(100,150,0)};
+const CRGB MAP_RGB_COLORS[3] = {CRGB::Red, CRGB::Green, CRGB::Blue};
 
 /**
  * Build a map with equally distributed hues (linear gradient) as required for the given LED map
@@ -105,7 +105,7 @@ static CRGB MAP_RGB_COLORS[3] = {CRGB::Red, CRGB::Green, CRGB::Blue};
  * @param hue_start: first hue of linear gradient (inclusive)
  * @param hue_stop: last hue of linear gradient (exclusive)
  */
-uint8_t* build_hue_map(size_t* led_map, bool skip_zero = false, uint8_t hue_start = 0, uint8_t hue_stop = 255){
+uint8_t* build_hue_map(uint8_t* led_map, bool skip_zero = false, uint8_t hue_start = 0, uint8_t hue_stop = 255){
   // count required hues
   uint8_t num_hues = 0;
   for (size_t i = 0; i < NUM_LEDS; ++i){
@@ -132,7 +132,7 @@ uint8_t* build_hue_map(size_t* led_map, bool skip_zero = false, uint8_t hue_star
  * @param led_map: array mapping LED indices to color indices
  * @param map_colors: array with colors
  */
-void fill_map(size_t* led_map = MAP_PENTAGON, CRGB* map_colors = MAP_RGB_COLORS){
+void fill_map(uint8_t* led_map = MAP_PENTAGON, CRGB* map_colors = MAP_RGB_COLORS){
   for (size_t i = 0; i < NUM_LEDS; ++i){
     leds[i] = map_colors[led_map[i]];
   }
@@ -145,7 +145,7 @@ void fill_map(size_t* led_map = MAP_PENTAGON, CRGB* map_colors = MAP_RGB_COLORS)
  * @param number: number in map to consider
  * @param color: color to set
  */
-void fill_submap(size_t* led_map, size_t number, CRGB color){
+void fill_submap(uint8_t* led_map, size_t number, CRGB color){
   for (size_t i = 0; i < NUM_LEDS; ++i){
     if (led_map[i] != number){ continue; }
     leds[i] = color;
@@ -165,7 +165,7 @@ void fill_submap(size_t* led_map, size_t number, CRGB color){
  * @param zero_is_off: if true, the value 0 in led_map has the special meaning of zero brightness
  */
 template <typename F = uint8_t(accum88)>
-void anim_map(size_t* led_map, uint8_t* map_hues, uint8_t bpm = 10, CRGBPalette16* palette = &defaultPalette,
+void anim_map(uint8_t* led_map, uint8_t* map_hues, uint8_t bpm = 10, CRGBPalette16* palette = &defaultPalette,
               F function8 = SAWTOOTH, uint8_t brightness = 255, TBlendType blending = LINEARBLEND, bool zero_is_off = false){
   for (size_t i = 0; i < NUM_LEDS; ++i){
     uint8_t hue = function8(bpm) - map_hues[led_map[i]];
@@ -177,7 +177,7 @@ void anim_map(size_t* led_map, uint8_t* map_hues, uint8_t bpm = 10, CRGBPalette1
  * Shortcut for anim_map(led_map, map_hues, ...) dynamically using equally distributed hues
  */
 template <typename F = uint8_t(accum88)>
-void anim_map(size_t* led_map = MAP_PENTAGON, uint8_t bpm = 10, CRGBPalette16* palette = &defaultPalette,
+void anim_map(uint8_t* led_map = MAP_PENTAGON, uint8_t bpm = 10, CRGBPalette16* palette = &defaultPalette,
               F function8 = SAWTOOTH, uint8_t brightness = 255, TBlendType blending = LINEARBLEND, bool zero_is_off = false){
   uint8_t *hue_map = build_hue_map(led_map, zero_is_off);
   anim_map(led_map, hue_map, bpm, palette, function8, brightness, blending, zero_is_off);
@@ -196,7 +196,7 @@ void anim_map(size_t* led_map = MAP_PENTAGON, uint8_t bpm = 10, CRGBPalette16* p
  * @param blending: blending type for color palette
  */
 template <typename F = uint8_t(accum88)>
-void anim_submap(size_t* led_map, size_t number, uint8_t bpm = 10, CRGBPalette16* palette = &defaultPalette,
+void anim_submap(uint8_t* led_map, size_t number, uint8_t bpm = 10, CRGBPalette16* palette = &defaultPalette,
               F function8 = SAWTOOTH, uint8_t brightness = 255, TBlendType blending = LINEARBLEND, bool zero_is_off = false){
   for (size_t i = 0; i < NUM_LEDS; ++i){
     if (led_map[i] != number) continue;

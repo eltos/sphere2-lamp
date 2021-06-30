@@ -16,6 +16,7 @@ ACTION_BPM = 11
 ACTION_PALETTE = 12
 ACTION_TIME_FUNCTION = 13
 ACTION_COLOR = 14
+ACTION_LED_MAP = 15
 ACTION_SET_LED = 101
 ACTION_SET_ALL = 102
 
@@ -39,6 +40,13 @@ TIME_FUNCTION_SAWTOOTH_REVERSE = 1
 TIME_FUNCTION_TRIANGULAR = 2
 TIME_FUNCTION_SINUSOIDAL = 3
 TIME_FUNCTION_QUADWAVE = 4
+
+# led maps
+LED_MAP_PENTAGON = 0
+LED_MAP_HEART = 1
+LED_MAP_KRAKEN = 2
+LED_MAP_KRAKEN_BG = 3
+LED_MAP_SNAKE = 4
 
 
 
@@ -128,6 +136,12 @@ class Sphere2lamp:
         :param value: one of the TIME_FUNCTION_* constants
         """
         self._send(ACTION_TIME_FUNCTION, value)
+
+    def led_map(self, value):
+        """Set the led map
+        :param value: one of the LED_MAP_* constants
+        """
+        self._send(ACTION_LED_MAP, value)
 
     def led_rgb(self, i, r, g, b):
         """Set the color of an individual LED as RGB

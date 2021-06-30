@@ -22,6 +22,8 @@
 #define ACTION_TIME_FUNCTION 13
 /* Set a color. Payload: [uint8_t 0_or_1, r_or_h, g_or_s, b_or_v] */
 #define ACTION_COLOR 14
+/* Set an led map. Payload: (see below) */
+#define ACTION_LED_MAP 15
 /* Set led color manually. Payload: (see below) */
 #define ACTION_SET_LED 101
 #define ACTION_SET_ALL 102
@@ -40,6 +42,7 @@ BLEByteCharacteristic cBpm             ("19B10011-E8F2-517E-4F6C-D104768A1214", 
 BLEByteCharacteristic cPalette         ("19B10012-E8F2-517E-4F6C-D104768A1214", BLERead | BLEWrite);
 BLEByteCharacteristic cTimeFunction    ("19B10013-E8F2-517E-4F6C-D104768A1214", BLERead | BLEWrite);
 BLECharacteristic     cColor           ("19B10014-E8F2-517E-4F6C-D104768A1214", BLERead | BLEWrite, 4, true);
+BLEByteCharacteristic cLedMap          ("19B10015-E8F2-517E-4F6C-D104768A1214", BLERead | BLEWrite);
 BLECharacteristic     cSetLed          ("19B10101-E8F2-517E-4F6C-D104768A1214", BLERead | BLEWrite, /*valueSize*/5, /*fixedLength*/true);
 BLECharacteristic     cSetAll          ("19B10102-E8F2-517E-4F6C-D104768A1214", BLERead | BLEWrite, 3*NUM_LEDS); // max 512
 
@@ -53,6 +56,7 @@ void setupCharacteristics(){
   bleService.addCharacteristic(cPalette);           cPalette.setEventHandler(BLEWritten, actionCallback<ACTION_PALETTE>);
   bleService.addCharacteristic(cTimeFunction); cTimeFunction.setEventHandler(BLEWritten, actionCallback<ACTION_TIME_FUNCTION>);
   bleService.addCharacteristic(cColor);               cColor.setEventHandler(BLEWritten, actionCallback<ACTION_COLOR>);
+  bleService.addCharacteristic(cLedMap);             cLedMap.setEventHandler(BLEWritten, actionCallback<ACTION_LED_MAP>);
   bleService.addCharacteristic(cSetLed);             cSetLed.setEventHandler(BLEWritten, actionCallback<ACTION_SET_LED>);
   bleService.addCharacteristic(cSetAll);             cSetAll.setEventHandler(BLEWritten, actionCallback<ACTION_SET_ALL>);
 }
@@ -60,6 +64,8 @@ void setupCharacteristics(){
 
 
 void setup() {
+  //Serial.begin(9600);
+  //
   Serial1.begin(9600);
 
   // set pin modes
@@ -124,6 +130,9 @@ void blePeripheralDisconnectHandler(BLEDevice central) {
  * Communication with sphere2lamp
  */
 void send_action(uint8_t action, uint8_t* data = NULL, size_t len = 0){
+  //return;
+  //
+  
   Serial1.write(action);
   uint8_t answer;
   if (Serial1.readBytes(&answer, 1) == 1 && answer == action && len > 0){
@@ -136,6 +145,16 @@ void send_action(uint8_t action, uint8_t* data = NULL, size_t len = 0){
  */
 template <uint8_t ACTION>
 void actionCallback(BLEDevice central, BLECharacteristic characteristic) {
+  //Serial.write("Characteristic ");
+  //Serial.write(characteristic.uuid());
+  //Serial.write(" written: ");
+  //for (int i = 0; i < characteristic.valueLength(); i++){
+  //  Serial.print(" ");
+  //  Serial.print(((uint8_t*) characteristic.value())[i]);
+  //}
+  //Serial.println();
+  //
+  
   send_action(ACTION, (uint8_t*) characteristic.value(), characteristic.valueLength());
 }
 
@@ -143,6 +162,12 @@ void actionCallback(BLEDevice central, BLECharacteristic characteristic) {
  * Callback for ON/OFF actions
  */
 void switchOnOffCallback(BLEDevice central, BLECharacteristic characteristic) {
+  //Serial.write("Characteristic ");
+  //Serial.write(characteristic.uuid());
+  //Serial.write(" written: ");
+  //Serial.println(cOnOff.value());
+  //
+  
   if (cOnOff.value()) {
     send_action(ACTION_ON);
     digitalWrite(LED_BUILTIN, HIGH);

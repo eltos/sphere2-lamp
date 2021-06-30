@@ -19,7 +19,9 @@
 #define ACTION_TIME_FUNCTION 13
 /* Set a color. Payload: [uint8_t 0_or_1, r_or_h, g_or_s, b_or_v] */
 #define ACTION_COLOR 14
-/* Set led color manually. Payload: (see below) */
+/* Set an led map. Payload: (see below) */
+#define ACTION_LED_MAP 15
+/* Set led color manually. Payload: [uint8_t map_constant] (see main for list of maps) */
 #define ACTION_SET_LED 101
 #define ACTION_SET_ALL 102
 
@@ -107,6 +109,13 @@ void serialEvent() {
         state.color = color_from_buf(0);
         stateChanged();
       } break;
+
+    case ACTION_LED_MAP:
+      if (got(1)){
+        state.led_map = buf[0];
+        stateChanged();
+      } break;
+      
 
     case ACTION_SET_LED: // set individual led colors by index
       if (got(5)){
