@@ -14,9 +14,11 @@ This allows to use standard 40 mm table tennis balls cut into half and placed on
 - Hollow styrofoam ball, 25 cm in diameter, consisting of two separable halfs
 - 61 table tennis ball, 40 mm in diameter, plain white
 - 122 adressable RGB LEDs, from a WS2812B Strip
-- Microcontroller, e.g. Arduino Nano or Nano BLE
+- Microcontroller, e.g. Arduino Nano
 - Power supply, 5V, ~15W, with connector
 - Wire
+- Optional: 470 µF capacitor for circuit protection, 220 Ω resistor
+- For control via bluetooth: Arduino Nano 33 BLE, 1 kΩ and 2.2 kΩ resistor
 
 ### Tools
 - Soldering equipment
@@ -28,7 +30,7 @@ This allows to use standard 40 mm table tennis balls cut into half and placed on
 
 
 
-## Construction
+## Sphere construction
 
 ### Spherical geometry
 
@@ -105,13 +107,18 @@ You might want to position the pole LEDs (number 1 and/or 122) slightly off cent
 Connect the LEDs from number 1 to 61 and 62 to 122 using your soldering equipment.
 Stitch the wire through the styrofoam such that the cables won't be visible in the gaps between the table tennis balls later on.
 Route the power wires from inside the hollow styrofoam ball stitching them through the sphere.
-The connection to the power supply should be close to the center of the supply chain.
 Use the connector that came with the LED strip to create a detachable connection (data + power) between LED 61 and 62 inside the sphere, allowing you to take the half spheres easily appart.
-Connect the data input of LED 1 with the Arduino Nano (pin D6) and the power to the Vin and GND pins.
 
 ![](images/wires_data.jpg)
 ![](images/wires_power.jpg)
 
+
+#### Connecting the Arduino Nano
+Connect the power supply (5V and GND wire) near the center of the LED supply chain, e.g. near LED 61.
+The data input of LED 1 will be connected to pin D11 of the Arduino, with an optional 220 Ω resistor.
+A 470 µF capacitor near the power supply is used to protect the circuit agains voltage spikes.
+
+![](images/circuit.png)
 
 #### Testing
 
@@ -121,7 +128,7 @@ Check the heat generation and power consumption by running all LEDs on maximum b
 You can use the functions `anim_count();` and `fill_solid(leds, NUM_LEDS, CRGB::White);` from the provided code for testing purposes.
 
 
-### Balls
+### Illuminated balls
 
 #### Cutting
 
@@ -139,6 +146,25 @@ Every other ball inserted into the resulting tube on top of the reference ball c
 #### Gluing
 
 Glue the halfened table tennis balls to the styrofoam ball using a suitable, solvent free glue (otherwise the solvent will dissolve the styrofoam!).
+
+
+### Optional: Bluetooth control
+
+To control the lamp over bluetooth low energy (BLE) using a smartphone, the Arduino Nano 33 BLE is used.
+Unfortunately the FastLED library used to drive the adressable LEDs is not compatible with this board.
+Therefore, two boards are used: The Arduino Nano 33 BLE is connected to the Arduino Nano via a serial interface as shown in the circuit sketch below.
+While the Nano drives the LEDs, the Nano 33 BLE handles the BLE connection, communicating with the Nano over serial.
+The voltage divider takes care of the logic level conversion (5V for the Nano, 3.3V for the Nano 33 BLE).
+
+The serial interface also allows to control the lamp with any other device, e.g. from a computer over USB.
+
+![](images/circuit-ble.png)
+
+
+
+
+
+
 
 
 
