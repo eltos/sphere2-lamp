@@ -53,5 +53,11 @@
     <string name="mode_solid">Uniform color</string>
     <string name="mode_anim_solid">Uniform animation</string>
     <string name="color">Color</string>
+    <string name="led_map_pentagon">Pentagon</string>
+    <string name="led_map_heart">Heart</string>
+    <string name="led_map_kraken">Kraken</string>
+    <string name="led_map_snake">Snake</string>
+    <string name="led_pattern_map">Pattern map</string>
+    <string name="led_map_kraken_bg">Kraken (on background)</string>
 
 </resources>

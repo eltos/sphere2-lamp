@@ -23,6 +23,7 @@ public final class Sphere2LampProperties {
     public static final String CHARACTERISTIC_COLOR_PALETTE =   "19B10012-E8F2-517E-4F6C-D104768A1214";
     public static final String CHARACTERISTIC_TIME_FUNCTION =   "19B10013-E8F2-517E-4F6C-D104768A1214";
     public static final String CHARACTERISTIC_COLOR =           "19B10014-E8F2-517E-4F6C-D104768A1214";
+    public static final String CHARACTERISTIC_LED_MAP =         "19B10015-E8F2-517E-4F6C-D104768A1214";
     
     
     public static final MenuProperty.Menu[] MENU_MODE = new MenuProperty.Menu[]{
@@ -47,6 +48,14 @@ public final class Sphere2LampProperties {
             new MenuProperty.Menu(  2, R.string.time_function_triangular),
             new MenuProperty.Menu(  3, R.string.time_function_sinusoidal),
             new MenuProperty.Menu(  4, R.string.time_function_quadwave),
+    };
+
+    public static final MenuProperty.Menu[] MENU_LED_MAP = new MenuProperty.Menu[]{
+            new MenuProperty.Menu(  0, R.string.led_map_pentagon),
+            new MenuProperty.Menu(  1, R.string.led_map_heart),
+            new MenuProperty.Menu(  2, R.string.led_map_kraken),
+            new MenuProperty.Menu(  3, R.string.led_map_kraken_bg),
+            new MenuProperty.Menu(  4, R.string.led_map_snake),
     };
 
 
@@ -77,6 +86,9 @@ public final class Sphere2LampProperties {
 
             case CHARACTERISTIC_COLOR:
                 return new ColorProperty(characteristic, 5, R.string.color, R.layout.dashboard_card_color);
+
+            case CHARACTERISTIC_LED_MAP:
+                return new MenuProperty(characteristic, 5, R.string.led_pattern_map, R.layout.dashboard_card_menu, MENU_LED_MAP);
             
 
 
