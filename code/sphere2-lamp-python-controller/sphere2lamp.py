@@ -19,6 +19,7 @@ ACTION_COLOR = 14
 ACTION_LED_MAP = 15
 ACTION_SET_LED = 101
 ACTION_SET_ALL = 102
+ACTION_GET = 250
 
 # mode bytes
 MODE_MANUAL = 0
@@ -66,6 +67,10 @@ class Sphere2lamp:
         """(Re-)open serial connection"""
         self.ser.open()
     
+    def is_open(self):
+        """Return if the serial connection is open"""
+        return self.ser.is_open
+    
     def close(self):
         """Close serial connection"""
         self.ser.close()
@@ -83,39 +88,76 @@ class Sphere2lamp:
         # send payload data
         assert self.ser.write(serial.to_bytes(data)) == len(data), 'Failed to send data'
     
-    def on(self):
-        """Turns the lamp ON"""
+    def set_on(self):
+        """Turns the lamp ON
+        """
         self._send(ACTION_ON)
         
-    def off(self):
-        """Turns the lamp OFF"""
+    def set_off(self):
+        """Turns the lamp OFF
+        """
         self._send(ACTION_OFF)
     
-    def brightness(self, value):
+    def get_on(self):
+        """Queries if the lamp is ON
+        :return: whether the lamp is on
+        """
+        self._send(ACTION_GET, ACTION_ON)
+        return self.ser.read()[0] > 0
+    
+    def set_brightness(self, value):
         """Sets the overall brightness
         :param value: brightness (0..255)
         """
         self._send(ACTION_BRIGHTNESS, value)
     
-    def mode(self, value):
+    def get_brightness(self):
+        """Queries the overall brightness
+        :return: brightness (0..255)
+        """
+        self._send(ACTION_GET, ACTION_BRIGHTNESS)
+        return self.ser.read()[0]
+    
+    def set_mode(self, value):
         """Set the mode
         :param value: one of the MODE_* constants
         """
         self._send(ACTION_MODE, value)
     
-    def bpm(self, value):
+    def get_mode(self):
+        """Queries the mode
+        :return: one of the MODE_* constants
+        """
+        self._send(ACTION_GET, ACTION_MODE)
+        return self.ser.read()[0]
+    
+    def set_bpm(self, value):
         """Set the animation speed
         :param value: speed in beats per minute (0..255)
         """
         self._send(ACTION_BPM, value)
+    
+    def get_bpm(self):
+        """Queries the animation speed
+        :return: speed in beats per minute (0..255)
+        """
+        self._send(ACTION_GET, ACTION_BPM)
+        return self.ser.read()[0]
 
-    def palette(self, value):
+    def set_palette(self, value):
         """Set the color palette
         :param value: one of the PALETTE_* constants
         """
         self._send(ACTION_PALETTE, value)
+
+    def get_palette(self):
+        """Queries the color palette
+        :return: one of the PALETTE_* constants
+        """
+        self._send(ACTION_GET, ACTION_PALETTE)
+        return self.ser.read()[0]
     
-    def color_rgb(self, r, g, b):
+    def set_color_rgb(self, r, g, b):
         """Set the color as RGB
         :param r: red color component (0..255)
         :param g: green color component (0..255)
@@ -123,25 +165,46 @@ class Sphere2lamp:
         """
         self._send(ACTION_COLOR, 0, r, g, b) 
     
-    def color_hsv(self, h, s, v):
+    def set_color_hsv(self, h, s, v):
         """Set the color as HSV
         :param h: color hue (0..255)
         :param s: color saturation (0..255)
         :param v: color value (0..255)
         """
-        self._send(ACTION_COLOR, 1, h, s, v) 
+        self._send(ACTION_COLOR, 1, h, s, v)    
+    
+    def get_color_rgb(self):
+        """Queries the color as RGB
+        :return: red color component (0..255), green color component (0..255), blue color component (0..255)
+        """
+        self._send(ACTION_GET, ACTION_COLOR)
+        return list(self.ser.read(3))
 
-    def time_function(self, value):
+    def set_time_function(self, value):
         """Set the time function
         :param value: one of the TIME_FUNCTION_* constants
         """
         self._send(ACTION_TIME_FUNCTION, value)
 
-    def led_map(self, value):
+    def get_time_function(self):
+        """Queries the time function
+        :return: one of the TIME_FUNCTION_* constants
+        """
+        self._send(ACTION_GET, ACTION_TIME_FUNCTION)
+        return ord(self.ser.read())
+
+    def set_led_map(self, value):
         """Set the led map
         :param value: one of the LED_MAP_* constants
         """
         self._send(ACTION_LED_MAP, value)
+
+    def get_led_map(self):
+        """Queries the led map
+        :return: one of the LED_MAP_* constants
+        """
+        self._send(ACTION_GET, ACTION_LED_MAP)
+        return ord(self.ser.read())
 
     def led_rgb(self, i, r, g, b):
         """Set the color of an individual LED as RGB
@@ -174,10 +237,24 @@ class Sphere2lamp:
 
 
 if __name__ == '__main__':
+    import time
     
     lamp = Sphere2lamp('COM6')
-    lamp.on()
-    lamp.brightness(200)
+    time.sleep(3) # arduino may be reset upon connection
+        
+    print('Lamp is', 'ON' if lamp.get_on() else 'OFF', 'and brightness at', lamp.get_brightness())
+    print('Switching on with brightness 200...')
+    lamp.set_on()
+    lamp.set_brightness(200)
+    lamp.set_mode(MODE_ANIM_MAP)
+    lamp.set_bpm(30);
+    lamp.set_time_function(TIME_FUNCTION_SAWTOOTH);
+    lamp.set_palette(PALETTE_DEFAULT_RAINBOW);
+    lamp.set_led_map(LED_MAP_PENTAGON);
+    lamp.set_color_rgb(0, 200, 0)
+    
+    print('Lamp is', 'ON' if lamp.get_on() else 'OFF', 'and brightness at', lamp.get_brightness())
+        
     lamp.close()
 
 

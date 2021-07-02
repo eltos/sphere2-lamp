@@ -24,6 +24,8 @@
 /* Set led color manually. Payload: [uint8_t map_constant] (see main for list of maps) */
 #define ACTION_SET_LED 101
 #define ACTION_SET_ALL 102
+/* Read out state */
+#define ACTION_GET 250
 
 
 
@@ -138,6 +140,20 @@ void serialEvent() {
         }
       }
       break;
+
+    case ACTION_GET: // request state
+      if (got(1)){
+        switch (buf[0]) {
+          case ACTION_ON: case ACTION_OFF: Serial.write(state.on ? 1 : 0); break;
+          case ACTION_BRIGHTNESS: Serial.write(state.brightness); break;
+          case ACTION_MODE: Serial.write(state.mode); break;
+          case ACTION_BPM: Serial.write(state.bpm); break;
+          case ACTION_PALETTE: Serial.write(state.palette); break;
+          case ACTION_TIME_FUNCTION: Serial.write(state.time_function); break;
+          case ACTION_COLOR: Serial.write(state.color.r); Serial.write(state.color.g); Serial.write(state.color.b); break;
+          case ACTION_LED_MAP: Serial.write(state.led_map); break;
+        }
+      } break;
 
   }
     

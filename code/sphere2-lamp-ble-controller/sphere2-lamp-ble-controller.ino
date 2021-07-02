@@ -27,6 +27,8 @@
 /* Set led color manually. Payload: (see below) */
 #define ACTION_SET_LED 101
 #define ACTION_SET_ALL 102
+/* Read out state */
+#define ACTION_GET 250
 
 
 #define NUM_LEDS    122
@@ -59,23 +61,34 @@ void setupCharacteristics(){
   bleService.addCharacteristic(cLedMap);             cLedMap.setEventHandler(BLEWritten, actionCallback<ACTION_LED_MAP>);
   bleService.addCharacteristic(cSetLed);             cSetLed.setEventHandler(BLEWritten, actionCallback<ACTION_SET_LED>);
   bleService.addCharacteristic(cSetAll);             cSetAll.setEventHandler(BLEWritten, actionCallback<ACTION_SET_ALL>);
+
+}
+
+void readAllCharacteristics(){
+  // read out initial values
+  queryCharacteristic<ACTION_ON>(cOnOff);
+  queryCharacteristic<ACTION_BRIGHTNESS>(cBrightness);
+  queryCharacteristic<ACTION_BPM>(cBpm);
+  queryCharacteristic<ACTION_MODE>(cMode);
+  queryCharacteristic<ACTION_PALETTE>(cPalette);
+  queryCharacteristic<ACTION_TIME_FUNCTION>(cTimeFunction);
+  queryCharacteristic<ACTION_COLOR>(cColor);
+  queryCharacteristic<ACTION_LED_MAP>(cLedMap);
+  
 }
 
 
 
 void setup() {
-  //Serial.begin(9600);
-  //
   Serial1.begin(9600);
 
   // set pin modes
   pinMode(LED_BLUE, OUTPUT);
   pinMode(LED_BUILTIN, OUTPUT);
-  
-  // begin initialization
+
+  // initialization
   if (!BLE.begin()) {
-    while (1){
-      // rapid flashing indicates error
+    while (1){ // rapid flashing indicates error
       digitalWrite(LED_BLUE, millis()%100 > 40 ? LOW : HIGH);
     }
   }
@@ -95,7 +108,11 @@ void setup() {
   // start advertising
   BLE.setLocalName(BLE_NAME);
   BLE.advertise();
-  
+
+  // read initial state
+  delay(3000);
+  readAllCharacteristics();
+
 }
 
 void loop() {
@@ -130,9 +147,6 @@ void blePeripheralDisconnectHandler(BLEDevice central) {
  * Communication with sphere2lamp
  */
 void send_action(uint8_t action, uint8_t* data = NULL, size_t len = 0){
-  //return;
-  //
-  
   Serial1.write(action);
   uint8_t answer;
   if (Serial1.readBytes(&answer, 1) == 1 && answer == action && len > 0){
@@ -140,34 +154,31 @@ void send_action(uint8_t action, uint8_t* data = NULL, size_t len = 0){
   }
 }
 
+void query_action(uint8_t action, uint8_t* data, size_t len){
+  send_action(ACTION_GET, &action, 1);
+  Serial1.readBytes(data, len);
+}
+
 /**
  * Generic callback sending an action with the characteristic's value as payload
  */
 template <uint8_t ACTION>
 void actionCallback(BLEDevice central, BLECharacteristic characteristic) {
-  //Serial.write("Characteristic ");
-  //Serial.write(characteristic.uuid());
-  //Serial.write(" written: ");
-  //for (int i = 0; i < characteristic.valueLength(); i++){
-  //  Serial.print(" ");
-  //  Serial.print(((uint8_t*) characteristic.value())[i]);
-  //}
-  //Serial.println();
-  //
-  
   send_action(ACTION, (uint8_t*) characteristic.value(), characteristic.valueLength());
+}
+
+/**
+ * Generic method reading an action and setting the characteristic's value
+ */
+template <uint8_t ACTION>
+void queryCharacteristic(BLECharacteristic characteristic) {
+  query_action(ACTION, (uint8_t*) characteristic.value(), characteristic.valueSize());
 }
 
 /**
  * Callback for ON/OFF actions
  */
 void switchOnOffCallback(BLEDevice central, BLECharacteristic characteristic) {
-  //Serial.write("Characteristic ");
-  //Serial.write(characteristic.uuid());
-  //Serial.write(" written: ");
-  //Serial.println(cOnOff.value());
-  //
-  
   if (cOnOff.value()) {
     send_action(ACTION_ON);
     digitalWrite(LED_BUILTIN, HIGH);
