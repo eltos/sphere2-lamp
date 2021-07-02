@@ -154,7 +154,7 @@ void loop(){
         anim_distance(0, 0, state.bpm, &palette_p, time_function_p);
         break;
       case MODE_ANIM_AZIMUTH_GRADIENT:
-        anim_azimuth(state.bpm, &palette_p, CRGB::White, time_function_p);
+        anim_azimuth(state.bpm, &palette_p, state.color, time_function_p);
         break;
       
     }

@@ -144,7 +144,7 @@ public abstract class Property<T> {
             case CHARACTERISTIC_TIME_FUNCTION:
                 return ANIMATION_MODES.contains(mode);
             case CHARACTERISTIC_COLOR:
-                return mode == MODE_SOLID || mode == MODE_ANIM_MAP;
+                return mode == MODE_SOLID || mode == MODE_ANIM_MAP || mode == MODE_ANIM_AZIMUTH_GRADIENT;
             case CHARACTERISTIC_LED_MAP:
                 return mode == MODE_ANIM_MAP;
             case CHARACTERISTIC_SET_LED:
