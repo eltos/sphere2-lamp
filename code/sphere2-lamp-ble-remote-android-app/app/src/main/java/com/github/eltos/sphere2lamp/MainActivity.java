@@ -96,8 +96,6 @@ public class MainActivity extends AppCompatActivity implements BleDeviceListDial
             Sphere2Lamp.disconnect();
         } else if (id == R.id.action_select_device) {
             connect(false);
-        } else if (id == R.id.action_refresh) {
-            Sphere2Lamp.readAllProperties();
         }
 
         return super.onOptionsItemSelected(item);
@@ -162,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements BleDeviceListDial
     }
 
     @Override
-    public void onLampPropertiesUpdated() {
+    public void onLampPropertyUpdated(String uuid) {
     }
     
     

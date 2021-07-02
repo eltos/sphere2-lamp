@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
+import com.github.eltos.sphere2lamp.properties.Property;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -27,7 +29,7 @@ public final class Sphere2Lamp {
         void onLampConnectionChange();
         void onLampError(@StringRes int id);
         void onLampPropertiesDiscovered();
-        void onLampPropertiesUpdated();
+        void onLampPropertyUpdated(String uuid);
     }
 
     
@@ -191,7 +193,7 @@ public final class Sphere2Lamp {
         @Override
         public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status){
             if (status == BluetoothGatt.GATT_SUCCESS){
-                callCallbacks(Callback::onLampPropertiesUpdated);
+                callCallbacks(callback -> callback.onLampPropertyUpdated(characteristic.getUuid().toString()));
             }
             // perform pending reads/writes from queue
             mQueueIdle = true;
@@ -204,11 +206,11 @@ public final class Sphere2Lamp {
      * Return property for given uuid
      */
     @Nullable
-    public static Sphere2LampProperties.Property<?> getProperty(@NonNull String uuid){
+    public static Property<?> getProperty(@NonNull String uuid){
         if (mGatt != null && mService != null) {
             BluetoothGattCharacteristic c = mService.getCharacteristic(UUID.fromString(uuid));
             if (c != null) {
-                return Sphere2LampProperties.propertyFor(c);
+                return Property.wrapCharacteristic(c);
             }
         }
         return null;
@@ -218,11 +220,11 @@ public final class Sphere2Lamp {
      * Return a list of properties the lamp supports
      */
     @NonNull
-    public static List<Sphere2LampProperties.Property<?>> getProperties(){
-        List<Sphere2LampProperties.Property<?>> properties = new ArrayList<>();
+    public static List<Property<?>> getProperties(){
+        List<Property<?>> properties = new ArrayList<>();
         if (mGatt != null && mService != null) {
             for (BluetoothGattCharacteristic characteristic : mService.getCharacteristics()){
-                properties.add(Sphere2LampProperties.propertyFor(characteristic));
+                properties.add(Property.wrapCharacteristic(characteristic));
             }
         }
         return properties;        
@@ -231,7 +233,7 @@ public final class Sphere2Lamp {
     /**
      * Trigger a write of the characteristic associated with the property
      */
-    public static void writeProperty(@NonNull Sphere2LampProperties.Property<?> property){
+    public static void writeProperty(@NonNull Property<?> property){
         if (mGatt != null) {
             queueWrite(property.characteristic);
         }

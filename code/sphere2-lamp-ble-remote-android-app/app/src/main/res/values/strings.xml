@@ -59,5 +59,8 @@
     <string name="led_map_snake">Snake</string>
     <string name="led_pattern_map">Pattern map</string>
     <string name="led_map_kraken_bg">Kraken (on background)</string>
+    <string name="filter_items">Filter items</string>
+    <string name="single_led_color">Single LED color</string>
+    <string name="batch_led_color">Batch LED colors</string>
 
 </resources>
