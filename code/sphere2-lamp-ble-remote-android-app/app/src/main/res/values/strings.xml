@@ -62,5 +62,9 @@
     <string name="filter_items">Filter items</string>
     <string name="single_led_color">Single LED color</string>
     <string name="batch_led_color">Batch LED colors</string>
+    <string name="palette_ocean">Ocean</string>
+    <string name="palette_forest">Forest</string>
+    <string name="palette_lava">Lava</string>
+    <string name="palette_rgb">Red-green-blue</string>
 
 </resources>

@@ -57,6 +57,10 @@ public abstract class Property<T> {
             new MenuProperty.Menu(  0, R.string.palette_rainbow),
             new MenuProperty.Menu(  1, R.string.palette_red_stripe),
             new MenuProperty.Menu(  2, R.string.palette_party),
+            new MenuProperty.Menu(  3, R.string.palette_ocean),
+            new MenuProperty.Menu(  4, R.string.palette_forest),
+            new MenuProperty.Menu(  5, R.string.palette_lava),
+            new MenuProperty.Menu(  6, R.string.palette_rgb),
     };
 
     public static final MenuProperty.Menu[] MENU_TIME_FUNCTION = new MenuProperty.Menu[]{
