@@ -19,6 +19,10 @@
 #define PALETTE_DEFAULT_RAINBOW 0
 #define PALETTE_RED_STRIPE 1
 #define PALETTE_PARTY 2
+#define PALETTE_OCEAN 3
+#define PALETTE_FOREST 4
+#define PALETTE_LAVA 5
+#define PALETTE_RGB 6
 
 #define TIME_FUNCTION_SAWTOOTH 0
 #define TIME_FUNCTION_SAWTOOTH_REVERSE 1
@@ -39,7 +43,7 @@
 struct LampState {
   bool on = true;
   uint8_t brightness = 200;
-  uint8_t mode = MODE_ANIM_MAP;//MODE_ANIM_ROTATING_GRADIENT;
+  uint8_t mode = MODE_ANIM_MAP;
   uint8_t bpm = 30;
   uint8_t time_function = TIME_FUNCTION_SAWTOOTH;
   uint8_t palette = PALETTE_DEFAULT_RAINBOW;
@@ -77,6 +81,10 @@ void stateChanged(){
     case PALETTE_DEFAULT_RAINBOW:           palette_p = RainbowColors_p;  break;
     case PALETTE_RED_STRIPE:                palette_p = red_stripe_p;     break;
     case PALETTE_PARTY:                     palette_p = PartyColors_p;    break;
+    case PALETTE_OCEAN:                     palette_p = OceanColors_p;    break;
+    case PALETTE_FOREST:                    palette_p = ForestColors_p;   break;
+    case PALETTE_LAVA:                      palette_p = LavaColors_p;     break;
+    case PALETTE_RGB:                       palette_p = rgb_p;            break;
   }
   // led map
   switch (state.led_map){
