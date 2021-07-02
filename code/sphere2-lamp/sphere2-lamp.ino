@@ -25,7 +25,7 @@ const uint8_t PHI[NUM_LEDS] = {128,204,0,51,102,153,153,178,204,230,0,26,51,76,1
 
 
 void setup() {
-  delay(3000); // 3 second delay for recovery
+  delay(1000); // 1 second delay for recovery
 
   // initialize FastLED
   FastLED.addLeds<LED_TYPE,DATA_PIN>(leds, NUM_LEDS);
