@@ -35,6 +35,7 @@
 #define LED_MAP_KRAKEN 2
 #define LED_MAP_KRAKEN_BG 3
 #define LED_MAP_SNAKE 4
+#define LED_MAP_SPIRAL 5
 
 
 /**
@@ -94,6 +95,7 @@ void stateChanged(){
     case LED_MAP_KRAKEN:        led_map_bg_color = false; memcpy_P(led_map_p, MAP_KRAKEN,     NUM_LEDS); break;
     case LED_MAP_KRAKEN_BG:     led_map_bg_color = true;  memcpy_P(led_map_p, MAP_KRAKEN,     NUM_LEDS); break;
     case LED_MAP_SNAKE:         led_map_bg_color = true;  memcpy_P(led_map_p, MAP_SNAKE,      NUM_LEDS); break;
+    case LED_MAP_SPIRAL:        led_map_bg_color = true;  memcpy_P(led_map_p, MAP_SPIRAL,     NUM_LEDS); break;
   }
         
   // save state to EEPROM

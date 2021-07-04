@@ -77,6 +77,7 @@ public abstract class Property<T> {
             new MenuProperty.Menu(  2, R.string.led_map_kraken),
             new MenuProperty.Menu(  3, R.string.led_map_kraken_bg),
             new MenuProperty.Menu(  4, R.string.led_map_snake),
+            new MenuProperty.Menu(  5, R.string.led_map_spiral),
     };
 
 

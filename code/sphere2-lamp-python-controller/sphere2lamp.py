@@ -48,6 +48,7 @@ LED_MAP_HEART = 1
 LED_MAP_KRAKEN = 2
 LED_MAP_KRAKEN_BG = 3
 LED_MAP_SNAKE = 4
+LED_MAP_SPIRAL = 5
 
 
 
@@ -61,7 +62,10 @@ class Sphere2lamp:
         self.ser = serial.Serial(serial_port, timeout=5)
 
     def __del__(self):
-        self.close()
+        try:
+            self.close()
+        except:
+            pass
     
     def open(self):
         """(Re-)open serial connection"""
