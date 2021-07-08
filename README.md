@@ -20,7 +20,7 @@ For control via bluetooth low energy (BLE), an Arduino Nano 33 BLE is used. Sinc
 An android app for control of the lamp via BLE can be found in [code/sphere2-lamp-ble-remote-android-app](code/sphere2-lamp-ble-remote-android-app).
 
 
-### Images
+### Demo video
 
-![](image.jpg)
-
+[![Demo video](cover.jpg)](https://player.vimeo.com/video/572701831)  
+https://player.vimeo.com/video/572701831
