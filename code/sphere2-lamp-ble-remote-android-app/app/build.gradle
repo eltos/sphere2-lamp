@@ -6,11 +6,13 @@ android {
     compileSdkVersion 30
 
     defaultConfig {
-        applicationId "com.example.sphere2lamp"
+        applicationId "com.github.eltos.sphere2lamp"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+
+        resConfigs "en"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
