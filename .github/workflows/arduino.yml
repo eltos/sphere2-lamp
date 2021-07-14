@@ -4,9 +4,9 @@ on:
   pull_request:
   push:
     paths:
-      - .github/workflows/arduino.yml
-      - code/sphere2-lamp
-      - code/sphere2-lamp-ble-controller
+      - '.github/workflows/arduino.yml'
+      - 'code/sphere2-lamp/**'
+      - 'code/sphere2-lamp-ble-controller/**'
 
 
 jobs:
