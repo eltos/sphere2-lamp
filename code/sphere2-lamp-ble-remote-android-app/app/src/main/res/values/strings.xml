@@ -1,18 +1,11 @@
 <resources>
     <string name="app_name">Sphere² Lamp</string>
-    <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="dashboard">Dashboard</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="connect">Connect</string>
     <string name="disconnect">Disconnect</string>
     <string name="bluetooth_not_supported">Bluetooth not supported</string>
     <string name="select_bluetooth_device">Select bluetooth device</string>
-    <string name="scan_again">Rescan</string>
     <string name="permission_required">Permission required</string>
     <string name="explain_permissions">You must grant the bluetooth permission to connect.\nYou must also grant the location permission to be able to search for and discover nearby bluetooth devices. Your location will not be evaluated.</string>
     <string name="settings">Settings</string>
@@ -36,7 +29,6 @@
     <string name="palette_red_stripe">Red stripe</string>
     <string name="palette_party">Party colors</string>
     <string name="set">Set</string>
-    <string name="dashboard_updated">Dashboard updated</string>
     <string name="action_refresh">Refresh</string>
     <string name="connection_failed">Connection failed</string>
     <string name="invalid_format">Invalid format</string>
@@ -49,7 +41,6 @@
     <string name="time_function">Time function</string>
     <string name="stop">Stop</string>
     <string name="scan">Scan</string>
-    <string name="select">Select</string>
     <string name="mode_solid">Uniform color</string>
     <string name="mode_anim_solid">Uniform animation</string>
     <string name="color">Color</string>

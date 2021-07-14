@@ -88,7 +88,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     };
 
-    //@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     private final SortedList<Property<?>> mVisibleProperties = new SortedList<>((Class<Property<?>>) (Class<?>) Property.class, mCallback);
     private final List<Property<?>> mAllProperties = new ArrayList<>();
     private boolean mFilterItems = true;
@@ -199,7 +199,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
      * Basic view holder class, holding elements common to all card views
      */
     public static abstract class BaseViewHolder extends RecyclerView.ViewHolder {
-        TextView name;
+        final TextView name;
         public BaseViewHolder(View itemView) {
             super(itemView);
             this.name = itemView.findViewById(R.id.name);
@@ -211,8 +211,8 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
      * Raw view holder with an input field for arbitrary byte array values
      */
     public static class RawViewHolder extends BaseViewHolder {
-        EditText editText;
-        Button button;
+        final EditText editText;
+        final Button button;
         public RawViewHolder(View itemView) {
             super(itemView);
             this.editText = itemView.findViewById(R.id.value);
@@ -253,7 +253,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
      * View holder with a single switch
      */
     public static class SwitchViewHolder extends BaseViewHolder {
-        SwitchCompat switch1;
+        final SwitchCompat switch1;
         public SwitchViewHolder(View itemView) {
             super(itemView);
             this.switch1 = itemView.findViewById(R.id.switch1);
@@ -271,8 +271,8 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
      * View holder with a slider to adjust values in percent
      */
     public static class SliderViewHolder extends BaseViewHolder {
-        TextView info;
-        SeekBar slider;
+        final TextView info;
+        final SeekBar slider;
         public SliderViewHolder(View itemView) {
             super(itemView);
             this.info = itemView.findViewById(R.id.info);
@@ -307,7 +307,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
      * View holder with an input field for a numeric value in range 0..255
      */
     public static class NumberViewHolder extends BaseViewHolder {
-        EditText input;
+        final EditText input;
         private ByteValueProperty item;
         public NumberViewHolder(View itemView) {
             super(itemView);
@@ -348,7 +348,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
      * View holder with a drop down menu
      */
     public class MenuViewHolder extends BaseViewHolder {
-        AppCompatSpinner spinner;
+        final AppCompatSpinner spinner;
         public MenuViewHolder(View itemView) {
             super(itemView);
             this.spinner = itemView.findViewById(R.id.value);
@@ -414,7 +414,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
      * View holder for a single color
      */
     public class ColorViewHolder extends BaseViewHolder {
-        ColorView color;
+        final ColorView color;
         public ColorViewHolder(View itemView) {
             super(itemView);
             this.color = itemView.findViewById(R.id.color);

@@ -156,7 +156,7 @@ public class BleDeviceListDialog extends CustomListDialog<BleDeviceListDialog> {
     }
 
 
-    BroadcastReceiver mBluetoothBroadcastReceiver = new BroadcastReceiver() {
+    final BroadcastReceiver mBluetoothBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
@@ -285,7 +285,7 @@ public class BleDeviceListDialog extends CustomListDialog<BleDeviceListDialog> {
             return super.getView(position, convertView, parent);
         }
 
-        AdvancedFilter mFilter = new AdvancedFilter(true, true){
+        final AdvancedFilter mFilter = new AdvancedFilter(true, true){
             @Override
             protected boolean matches(BluetoothDevice device, @NonNull CharSequence constraint) {
                 return matches(device.getName()) || matches(device.getAddress());

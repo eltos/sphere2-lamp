@@ -33,7 +33,7 @@ public final class Sphere2Lamp {
     }
 
     
-    public static UUID UUID_SERVICE = UUID.fromString("19B10000-E8F2-517E-4F6C-D104768A1214");
+    public static final UUID UUID_SERVICE = UUID.fromString("19B10000-E8F2-517E-4F6C-D104768A1214");
     
 
     private static final Set<Callback> mCallbacks = new HashSet<>();
