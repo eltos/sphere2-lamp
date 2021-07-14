@@ -126,7 +126,7 @@ public class DashboardFragment extends Fragment implements Sphere2Lamp.Callback,
     }
 
     @Override
-    public void onLampError(@StringRes int id) {
+    public void onLampConnectionError(@StringRes int id) {
         updateLoadingIndicator();
     }
 

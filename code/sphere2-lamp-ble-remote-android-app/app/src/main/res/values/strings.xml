@@ -67,5 +67,6 @@
     <string name="palette_forest">Forest</string>
     <string name="palette_lava">Lava</string>
     <string name="palette_rgb">Red-green-blue</string>
+    <string name="enabling_bluetooth">Enabling bluetooth</string>
 
 </resources>

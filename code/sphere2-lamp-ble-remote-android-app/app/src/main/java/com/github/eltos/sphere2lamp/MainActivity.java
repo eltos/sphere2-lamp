@@ -2,8 +2,10 @@ package com.github.eltos.sphere2lamp;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -39,6 +41,28 @@ public class MainActivity extends AppCompatActivity implements BleDeviceListDial
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
     private BluetoothAdapter mBluetoothAdapter;
+    private boolean mAutoConnect = false;
+    BroadcastReceiver mBluetoothBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+                switch(state) {
+                    case BluetoothAdapter.STATE_OFF:
+                    case BluetoothAdapter.STATE_TURNING_OFF:
+                        Sphere2Lamp.disconnect();
+                        break;
+                    case BluetoothAdapter.STATE_ON:
+                        if (mAutoConnect) connect(true);
+                        break;
+
+                }
+
+            }
+        }
+    };
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +82,10 @@ public class MainActivity extends AppCompatActivity implements BleDeviceListDial
 
         // get bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        registerReceiver(mBluetoothBroadcastReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
 
         // auto connect
-        if (!Sphere2Lamp.isConnected()) {
+        if (savedInstanceState == null && !Sphere2Lamp.isConnected()) {
             connect(true);
         }
     }
@@ -69,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements BleDeviceListDial
     protected void onDestroy() {
         Sphere2Lamp.removeCallback(this);
         //Sphere2Lamp.disconnect();
+        unregisterReceiver(mBluetoothBroadcastReceiver);
         super.onDestroy();
     }
 
@@ -121,9 +147,15 @@ public class MainActivity extends AppCompatActivity implements BleDeviceListDial
                 String address = pref.getString(PREF_DEVICE_ADDRESS, null);
                 
                 if (connectLastDevice && address != null && BluetoothAdapter.checkBluetoothAddress(address)) {
-                    // enable bluetooth and connect to known address
-                    if (!mBluetoothAdapter.isEnabled()){ mBluetoothAdapter.enable(); }
-                    Sphere2Lamp.connect(this, mBluetoothAdapter.getRemoteDevice(address));
+                    if (!mBluetoothAdapter.isEnabled()){
+                        // enable bluetooth and proceed once enabled
+                        mAutoConnect = true;
+                        mBluetoothAdapter.enable();
+                        Toast.makeText(getContext(), R.string.enabling_bluetooth, Toast.LENGTH_SHORT).show();
+                    } else {
+                        // connect to known address
+                        Sphere2Lamp.connect(this, mBluetoothAdapter.getRemoteDevice(address));
+                    }
 
                 } else {
                     // no known address, discover devices and let the user select one
@@ -151,8 +183,14 @@ public class MainActivity extends AppCompatActivity implements BleDeviceListDial
     }
     
     @Override
-    public void onLampError(@StringRes int id) {
+    public void onLampConnectionError(@StringRes int id) {
         Toast.makeText(this, id, Toast.LENGTH_LONG).show();
+        // reset saved address
+        SharedPreferences pref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.remove(PREF_DEVICE_ADDRESS);
+        editor.apply();
+
     }
 
     @Override

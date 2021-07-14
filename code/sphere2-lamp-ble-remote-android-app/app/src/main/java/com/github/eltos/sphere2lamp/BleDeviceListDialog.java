@@ -6,12 +6,17 @@ import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Checkable;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
@@ -36,13 +41,15 @@ public class BleDeviceListDialog extends CustomListDialog<BleDeviceListDialog> {
     private final ArrayList<BluetoothDevice> mDeviceList = new ArrayList<>();
     private final HashMap<BluetoothDevice, String> mCachedDeviceNames = new HashMap<>();
     private boolean mScanning = false;
+    private boolean mAutoStartScan = true;
 
     public static BleDeviceListDialog build(){
         return new BleDeviceListDialog()
                 .choiceMode(SINGLE_CHOICE)
+                .choiceMin(1)
                 .emptyText(R.string.no_devices)
-                .pos(R.string.select)
-                .neut();
+                .pos(R.string.connect)
+                .neut(R.string.scan);
     }
 
     @Override
@@ -60,12 +67,15 @@ public class BleDeviceListDialog extends CustomListDialog<BleDeviceListDialog> {
         }
 
         // create bluetooth adapter
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        mBleScanner = bluetoothAdapter.getBluetoothLeScanner();
-        if (!bluetoothAdapter.isEnabled()){
-            bluetoothAdapter.enable();
-        }
+        getActivity().registerReceiver(mBluetoothBroadcastReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        stopScan();
+        getActivity().unregisterReceiver(mBluetoothBroadcastReceiver);
     }
 
     @Override
@@ -79,7 +89,7 @@ public class BleDeviceListDialog extends CustomListDialog<BleDeviceListDialog> {
             }
         });
 
-        if (mDeviceList.size() == 0) {
+        if (mAutoStartScan && mDeviceList.size() == 0) {
             // auto start for few seconds
             startScan();
             new Handler().postDelayed(this::stopScan, 5_000);
@@ -90,6 +100,25 @@ public class BleDeviceListDialog extends CustomListDialog<BleDeviceListDialog> {
 
 
     public void startScan(){
+        mAutoStartScan = false;
+
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (bluetoothAdapter == null) {
+            Toast.makeText(getContext(), R.string.bluetooth_not_supported, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!bluetoothAdapter.isEnabled()){
+            mAutoStartScan = true;
+            bluetoothAdapter.enable(); //startActivity(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
+            Toast.makeText(getContext(), R.string.enabling_bluetooth, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (mBleScanner == null) {
+            mBleScanner = bluetoothAdapter.getBluetoothLeScanner();
+        }
+
         if (mBleScanner != null){
             ScanSettings settings = new ScanSettings.Builder().setScanMode(SCAN_MODE_BALANCED).build();
             mBleScanner.startScan(null, settings, mScanCallback);
@@ -102,26 +131,50 @@ public class BleDeviceListDialog extends CustomListDialog<BleDeviceListDialog> {
             if (getNeutralButton() != null) {
                 getNeutralButton().setText(R.string.stop);
             }
+
         }
     }
 
     public void stopScan(){
-        if (mBleScanner != null){
+        if (mBleScanner != null) {
             mBleScanner.stopScan(mScanCallback);
-
-            mScanning = false;
-            mListAdapter.notifyDataSetChanged();
-
-            neut(R.string.scan);
-            if (getNeutralButton() != null) {
-                getNeutralButton().setText(R.string.scan);
-            }
         }
+
+        mAutoStartScan = false;
+        mScanning = false;
+        mListAdapter.notifyDataSetChanged();
+
+        neut(R.string.scan);
+        if (getNeutralButton() != null) {
+            getNeutralButton().setText(R.string.scan);
+        }
+
     }
 
     public boolean isScanning(){
         return mBleScanner != null && mScanning;
     }
+
+
+    BroadcastReceiver mBluetoothBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+                switch(state) {
+                    case BluetoothAdapter.STATE_OFF:
+                    case BluetoothAdapter.STATE_TURNING_OFF:
+                        stopScan();
+                        break;
+                    case BluetoothAdapter.STATE_ON:
+                        if (mAutoStartScan) startScan();
+                        break;
+
+                }
+
+            }
+        }
+    };
 
 
     public void updateList() {
@@ -158,7 +211,6 @@ public class BleDeviceListDialog extends CustomListDialog<BleDeviceListDialog> {
         }
     };
 
-
     @Override
     @CallSuper
     protected boolean callResultListener(int which, Bundle extras) {
@@ -183,7 +235,7 @@ public class BleDeviceListDialog extends CustomListDialog<BleDeviceListDialog> {
 
         @Override
         public int getCount() {
-            return super.getCount()+1;
+            return super.getCount() + (isScanning() ? 1 : 0);
         }
 
         @Override

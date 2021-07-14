@@ -27,7 +27,7 @@ public final class Sphere2Lamp {
     public interface Callback {
         Context getContext();
         void onLampConnectionChange();
-        void onLampError(@StringRes int id);
+        void onLampConnectionError(@StringRes int id);
         void onLampPropertiesDiscovered();
         void onLampPropertyUpdated(String uuid);
     }
@@ -73,7 +73,9 @@ public final class Sphere2Lamp {
 
     public static void connect(Context context, BluetoothDevice device){
         disconnect();
-        device.connectGatt(context, false, mConnectCallback);
+        mState = BluetoothProfile.STATE_CONNECTING;
+        callCallbacks(Callback::onLampConnectionChange);
+        device.connectGatt(context, true, mConnectCallback);
     }
 
     public static void disconnect(){
@@ -159,7 +161,7 @@ public final class Sphere2Lamp {
                 gatt.close();
             }
 
-            if (status != BluetoothGatt.GATT_SUCCESS) callCallbacks(callback -> callback.onLampError(R.string.connection_failed));
+            if (status != BluetoothGatt.GATT_SUCCESS) callCallbacks(callback -> callback.onLampConnectionError(R.string.connection_failed));
 
             callCallbacks(Callback::onLampConnectionChange);
 
@@ -170,7 +172,7 @@ public final class Sphere2Lamp {
             mService = gatt.getService(UUID_SERVICE);
             if (mService == null){
                 disconnect();
-                callCallbacks(callback -> callback.onLampError(R.string.device_not_supported));
+                callCallbacks(callback -> callback.onLampConnectionError(R.string.device_not_supported));
 
             } else {
                 // service successfully discovered
@@ -183,7 +185,7 @@ public final class Sphere2Lamp {
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status){
             if (status != BluetoothGatt.GATT_SUCCESS){
-                callCallbacks(callback -> callback.onLampError(R.string.failed_to_set_value));
+                callCallbacks(callback -> callback.onLampConnectionError(R.string.failed_to_set_value));
             }
             // perform pending reads/writes from queue
             mQueueIdle = true;
