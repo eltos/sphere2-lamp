@@ -1,0 +1,33 @@
+name: Android CI
+
+on:
+  pull_request:
+  push:
+    paths:
+      - .github/workflows/android.yml
+      - code/sphere2-lamp-ble-remote-android-app
+
+
+defaults:
+  run:
+    working-directory: code/sphere2-lamp-ble-remote-android-app
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v2
+    - name: Build Application with Gradle
+      run: chmod +x gradlew & ./gradlew build
+    - name: Fetch lint report
+      uses: actions/upload-artifact@v2
+      with:
+        name: reports
+        path: code/sphere2-lamp-ble-remote-android-app/app/build/reports

@@ -1,0 +1,41 @@
+name: Arduino CI
+
+on:
+  pull_request:
+  push:
+    paths:
+      - .github/workflows/arduino.yml
+      - code/sphere2-lamp
+      - code/sphere2-lamp-ble-controller
+
+
+jobs:
+  compile-main:
+    runs-on: ubuntu-latest
+    steps:
+      # checkout
+      - uses: actions/checkout@master
+      # compile sketch using https://github.com/marketplace/actions/compile-arduino-sketches
+      - uses: arduino/compile-sketches@v1
+        with:
+          fqbn: 'arduino:avr:uno'
+          libraries: |
+            - name: FastLED
+              version: 3.4.0
+          sketch-paths: code/sphere2-lamp
+
+  compile-ble:
+    runs-on: ubuntu-latest
+    steps:
+      # checkout
+      - uses: actions/checkout@master
+      # compile sketch using https://github.com/marketplace/actions/compile-arduino-sketches
+      - uses: arduino/compile-sketches@v1
+        with:
+          fqbn: 'arduino:mbed:nano33ble'
+          libraries: |
+            - name: ArduinoBLE
+              version: 1.2.1
+          sketch-paths: code/sphere2-lamp-ble-controller
+
+
