@@ -15,6 +15,14 @@
 #define MODE_ANIM_ROTATING_GRADIENT 15
 #define MODE_ANIM_POLAR_GRADIENT 16
 #define MODE_ANIM_AZIMUTH_GRADIENT 17
+#define MODE_ANIM_ROTATING_SEARCHLIGHT 18
+#define MODE_ANIM_ROTATING_SEARCHLIGHT_PALETTE 19
+#define MODE_ANIM_TWINKLE 21
+#define MODE_ANIM_GLITTER 22
+#define MODE_ANIM_SPRINKLE 23
+#define MODE_ANIM_SPOTLIGHTS 24
+#define MODE_ANIM_SPOTLIGHTS_PALETTE 25
+#define MODE_ANIM_POLICE 26
 
 #define PALETTE_DEFAULT_RAINBOW 0
 #define PALETTE_RED_STRIPE 1
@@ -158,6 +166,45 @@ void loop(){
       case MODE_ANIM_AZIMUTH_GRADIENT:
         anim_azimuth(state.bpm, &palette_p, state.color, time_function_p);
         break;
+      case MODE_ANIM_ROTATING_SEARCHLIGHT:
+        anim_searchlight(state.color, state.bpm, 100, 20);
+        break;
+      case MODE_ANIM_ROTATING_SEARCHLIGHT_PALETTE:
+        anim_searchlight(&palette_p, state.bpm, time_function_p, state.bpm, 100, 20);
+        break;
+
+
+      // other animations
+      case MODE_ANIM_TWINKLE:
+        anim_twinkle(state.bpm, &palette_p);
+        break;
+
+      case MODE_ANIM_GLITTER:
+        FastLED.clear();
+        anim_add_flashes<15>(state.color, 2, 500, 60000/state.bpm);
+        break;
+
+      case MODE_ANIM_SPRINKLE:
+        anim_sprinkle(state.bpm, &palette_p);
+        break;
+
+      case MODE_ANIM_SPOTLIGHTS:
+        fill_solid(leds, NUM_LEDS, state.color);
+        nscale8_video(leds, NUM_LEDS, 15);
+        anim_add_lava_blobs(state.color, state.bpm);
+        break;
+
+      case MODE_ANIM_SPOTLIGHTS_PALETTE: {
+        CRGB color = ColorFromPalette(palette_p, time_function_p(scale8_video(state.bpm, 25)), 255, LINEARBLEND);
+        fill_solid(leds, NUM_LEDS, color);
+        nscale8_video(leds, NUM_LEDS, 15);
+        anim_add_lava_blobs(color, state.bpm);
+        break;
+      }
+
+      case MODE_ANIM_POLICE:
+        anim_police_lights(state.bpm);
+        break;
       
     }
 
@@ -165,7 +212,7 @@ void loop(){
     FastLED.clear();
     digitalWrite(LED_BUILTIN, LOW);
     
-  }  
+  }
   
 
   
@@ -191,16 +238,18 @@ void loop(){
 //  anim_distance(TRIANGULAR(THETA_BPM), SAWTOOTH(PHI_BPM) + 128*(beat8(THETA_BPM) < 128), 47, &red_stripe, QUADWAVE);
 //  anim_azimuth();
 //  anim_azimuth(60, &party_palette, CRGB::Black, QUADWAVE);
+//  anim_add_searchlight(CRGB::Blue, 60, /*tail*/ 100, /*head*/ 20);
 
   /* Revolving alarm light / radar / searchlight */
 //  anim_searchlight(HUE_RED, 60);
 //  anim_searchlight(20, 60); // orange
+//  anim_police_lights(60);
 
   /* Random sprinkles and twinkles */
 //  anim_twinkle(3, &party_palette);
+//  anim_sprinkle(30, &party_palette);
 //  FastLED.clear(); anim_add_flashes();
 //  FastLED.clear(); anim_add_flashes<20>(CRGB::Red, 2, 500, 1);
-//  fadeToBlackBy(leds, NUM_LEDS, 10); int pos = random16(NUM_LEDS); leds[pos] += CHSV(HUE_GREEN+random8(64), 200, 255);
 
   /* Globe */
 //  fill_map(MAP_EARTH, MAP_EARTH_COLORS); 
@@ -209,7 +258,10 @@ void loop(){
 
 
 
-  FastLED.show();
-
+  
+//  anim_fps();
 //  serial_print_fps();
+  
+  FastLED.show();
+  
 }

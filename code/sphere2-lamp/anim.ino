@@ -64,9 +64,10 @@ DEFINE_GRADIENT_PALETTE( rgb_p ) {
  * @param flashes: number of flashes
  * @return: function output in range 0 to 255
  */
-uint8_t flash(uint8_t x, uint8_t flashes){
+uint8_t flash(uint8_t x, uint8_t flashes = 1, uint8_t min = 0, uint8_t max = 255){
   float s = pow(255-x, 2)/255;
-  return s*pow(cos(PI*flashes*s/255), 2);
+  uint8_t v = s*pow(cos(PI*flashes*s/255), 2);
+  return min + scale8(v, max-min);
 }
 
 /**
@@ -76,9 +77,10 @@ uint8_t flash(uint8_t x, uint8_t flashes){
  * @param flashes: number of flashes
  * @return: function output in range 0 to 255
  */
-uint8_t blink(uint8_t x, uint8_t flashes){
+uint8_t blink(uint8_t x, uint8_t flashes = 1, uint8_t min = 0, uint8_t max = 255){
   float s = pow(255-x, 2)/255;
-  return s*pow(cos(PI*(flashes+0.25)*s/255), 2);
+  uint8_t v = s*pow(cos(PI*(flashes+0.25)*s/255), 2);
+  return min + scale8(v, max-min);
 }
 
 
@@ -318,7 +320,7 @@ void anim_count(uint8_t brightness = 255){
  * 
  * @param bpm: animation speed in cycles (beats) per minute (actual value is up to 5 larger for some LEDs)
  * @param palette: color palette to use
- * @param brightness: maximum LED brightness 
+ * @param brightness: maximum LED brightness
  * @param modulate_brightness: if true, modulate brightness, i.e. dim by 20%
  */
  void anim_twinkle(uint8_t bpm = 3, CRGBPalette16* palette = &defaultPalette, 
@@ -330,52 +332,163 @@ void anim_count(uint8_t brightness = 255){
   }
 }
 
-
-
- 
 /**
- * Various overlay animations 
+ * Sprinkling animation with random LEDs lighting up and fading with random color
+ * 
+ * Every LED cycles through the given color palette using a sinusoidal function 
+ * with a random initial phase and slightly different BPMs. The brightniss as a 
+ * whole is modulated with twice the given BPM by -20% if enabled.
+ * 
+ * @param bpm: animation speed in cycles per minute
+ * @param palette: color palette to use
+ * @param n: number of spinkles per cycle
+ * @param brightness: LED brightness
+ * @param blending: blending type for color palette
  */
+void anim_sprinkle(uint8_t bpm = 30, CRGBPalette16* palette = &defaultPalette, uint8_t n = 100,
+                   uint8_t brightness = 255, TBlendType blending = LINEARBLEND){
+  EVERY_N_MILLISECONDS(10){
+    fadeToBlackBy(leds, NUM_LEDS, 5);
+  }
+  EVERY_N_MILLISECONDS(60000/n/bpm) {
+    int pos = random16(NUM_LEDS);
+    leds[pos] += ColorFromPalette(*palette, random8(), brightness, blending);
+  }
+}
+
+
+/**
+ * Make an led switch between two colors to visualize the fps
+ * 
+ * @param led: the LED number, or all if greater than NUM_LEDS
+ * @param color1: the first color
+ * @param color2: the second color
+ */
+void anim_fps(size_t led = 0, CRGB color1 = CRGB::Red, CRGB color2 = CRGB::Blue){
+  static bool tick = true;
+  if (led >= 0 && led < NUM_LEDS){
+    leds[led] = tick ? color1 : color2;
+  } else {
+    fill_solid(leds, NUM_LEDS, tick ? color1 : color2);
+  }
+  tick = !tick;
+}
+
 
 
 /**
  * Create a rotating searchlight/radar, lighting up and fading the LEDs according to their azimuthal angle phi
  * 
- * @param hue: color hue of searchlight
+ * @param color: color of searchlight
  * @param bpm: turns per minute
- * @param saturation: color saturation of searchlight
- * @param brightness: color brightness of searchlight
  * @param tail: length of fading-out tail from 0..255
  * @param head: length of fading-in head from 0..255
  * @param ping_led: LED to flash at maximum brightness when hit by the searchlight/radar
  * @param ping_hue: color hue of flash
  * @param blend_over: if true, blends the animation over the existing colors instead of overwriting them
  */
-void anim_searchlight(uint8_t hue = 0, uint8_t bpm = 20, uint8_t saturation = 255, uint8_t brightness = 255,
-                      uint8_t tail = 100, uint8_t head = 20, size_t ping_led = -1, uint8_t ping_hue = 0,
-                      bool blend_over = false){
+void anim_searchlight(CRGB color, uint8_t bpm = 20, uint8_t tail = 100, uint8_t head = 20, uint8_t phase = 0,
+                      size_t ping_led = -1, uint8_t ping_hue = 0, bool blend_over = false){
   if (!blend_over) FastLED.clear();
   for (size_t i = 0; i < NUM_LEDS; ++i){
-    uint8_t value = SAWTOOTH(bpm) - PHI[i];
-    CRGB color;
+    uint8_t pos = SAWTOOTH(bpm) - PHI[i] + phase;
     if (i == ping_led){
-      value = 255-value;
-      color = CHSV(ping_hue, 255, value);
+      pos = 255-pos;
+      color = CHSV(ping_hue, 255, pos);
     } else {
       if (i == 0 || i == NUM_LEDS-1){
-        value = 255;
-      } else if (value < head){
-        value = 255.0*value/head;
-      } else if (value < head + tail){
-        value = 255*(1-(value-head)*1.0/tail);
+        pos = 255;
+      } else if (pos < head){
+        pos = 255.0*pos/head;
+      } else if (pos < head + tail){
+        pos = 255*(1-(pos-head)*1.0/tail);
       } else {
-        value = 0;
+        pos = 0;
       }
-      color = CHSV(hue, saturation, brightness);
     }
-    leds[i] = nblend(leds[i], color, value);
+    leds[i] = nblend(leds[i], color, pos);
   }
 }
+
+/**
+ * Variant of anim_searchlight with the color transitioning according to a palette
+ * 
+ * @param palette: color palette of searchlight
+ * @param palette_bpm: color palette cycle speed
+ * @param function8: function to calculate color palette hue shift as function of bpm and time
+ * @param bpm: turns per minute
+ * @param tail: length of fading-out tail from 0..255
+ * @param head: length of fading-in head from 0..255
+ * @param ping_led: LED to flash at maximum brightness when hit by the searchlight/radar
+ * @param ping_hue: color hue of flash
+ * @param blend_over: if true, blends the animation over the existing colors instead of overwriting them
+ * @param brightness: LED palette brightness
+ * @param blending: blending type for color palette
+ */
+template <typename F = uint8_t(accum88)>
+void anim_searchlight(CRGBPalette16* palette = &defaultPalette, uint8_t palette_bpm = 3, F function8 = SAWTOOTH,
+                      uint8_t bpm = 20, uint8_t tail = 100, uint8_t head = 20, uint8_t phase = 0,
+                      size_t ping_led = -1, uint8_t ping_hue = 0, bool blend_over = false,
+                      uint8_t brightness = 255, TBlendType blending = LINEARBLEND){
+  CRGB color = ColorFromPalette(*palette, function8(palette_bpm), brightness, blending);
+  anim_searchlight(color, bpm, tail, head, phase, ping_led, ping_hue, blend_over);
+}
+
+
+
+
+/**
+ * Make a red/blue flashing revolving alarm light
+ * 
+ * @param bpm: animation speed in cycles per minute
+ */
+void anim_police_lights(uint8_t bpm = 60){
+  FastLED.clear();
+  anim_searchlight(CHSV(HUE_RED,  255, flash(beat8(2*bpm)    , 3, 80)), bpm, 100, 20,   0, -1, 0, true);
+  anim_searchlight(CHSV(HUE_BLUE, 255, flash(beat8(2*bpm)+128, 3, 80)), bpm, 100, 20, 128, -1, 0, true);
+  leds[0] = CRGB::White;
+  leds[NUM_LEDS-1] = CRGB::White;
+}
+
+
+
+
+
+/**
+ * Lava-lamp like animation with blobs moving from bottom to top and back
+ * 
+ * @param color: color of bulbs
+ * @param bpm: animation speed in cycles per minute
+ * @param size: blob size
+ */
+template <size_t BLOBS = 3>
+void anim_add_lava_blobs(CRGB color = CRGB::Red, uint8_t bpm = 2, uint8_t size = 50){
+  static uint8_t blob_theta[BLOBS] = {0};
+  static uint8_t blob_phi[BLOBS] = {0};
+  EVERY_N_MILLISECONDS(25) {
+    // bulbs
+    for (size_t b = 0; b < BLOBS; ++b){
+      // make bulb rise and fall
+      uint8_t theta = beatsin8(bpm, 0, 255, 0, b*255/BLOBS); // quadwave8(
+      // on change of direction (at top/bottom) change azimuthal angle
+      if (theta != blob_theta[b] && (theta > blob_theta[b]) == blob_phi[b]%2){
+        blob_phi[b] = blob_phi[b] + 1 + 2*random8();
+      }
+      blob_theta[b] = theta;
+      // draw
+      uint8_t radius = size + scale8(beatsin8(10*bpm), 7);
+      for (size_t i = 0; i < NUM_LEDS; ++i){
+        if (absdiff8(THETA[i], blob_theta[b]) > radius) continue; // d > radius anyways, skip for speed improvement
+        uint8_t d = distance(THETA[i], PHI[i], blob_theta[b], blob_phi[b]);
+        if (d < radius){
+          d = 255-255*d/radius;
+          leds[i] = nblend(leds[i], color, d);
+        }
+      }
+    }
+  }
+}  
+
 
 /**
  * Make some LEDs flash randomly.

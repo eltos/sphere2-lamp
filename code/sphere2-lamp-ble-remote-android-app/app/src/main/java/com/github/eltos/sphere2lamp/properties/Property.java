@@ -39,18 +39,33 @@ public abstract class Property<T> {
     public static final int MODE_ANIM_ROTATING_GRADIENT = 15;
     public static final int MODE_ANIM_POLAR_GRADIENT = 16;
     public static final int MODE_ANIM_AZIMUTH_GRADIENT = 17;
+    public static final int MODE_ANIM_ROTATING_SEARCHLIGHT = 18;
+    public static final int MODE_ANIM_ROTATING_SEARCHLIGHT_PALETTE = 19;
+    public static final int MODE_ANIM_TWINKLE = 21;
+    public static final int MODE_ANIM_GLITTER = 22;
+    public static final int MODE_ANIM_SPRINKLE = 23;
+    public static final int MODE_ANIM_SPOTLIGHTS = 24;
+    public static final int MODE_ANIM_SPOTLIGHTS_PALETTE = 25;
+    public static final int MODE_ANIM_POLICE = 26;
 
-    private static final Set<Integer> ANIMATION_MODES = new HashSet<>(Arrays.asList(MODE_ANIM_MAP, MODE_ANIM_SOLID, MODE_ANIM_ROTATING_GRADIENT, MODE_ANIM_POLAR_GRADIENT, MODE_ANIM_AZIMUTH_GRADIENT));
 
 
     public static final MenuProperty.Menu[] MENU_MODE = new MenuProperty.Menu[]{
-            new MenuProperty.Menu(MODE_MANUAL,                  R.string.mode_manual),
-            new MenuProperty.Menu(MODE_SOLID,                   R.string.mode_solid),
-            new MenuProperty.Menu(MODE_ANIM_SOLID,              R.string.mode_anim_solid),
-            new MenuProperty.Menu(MODE_ANIM_MAP,                R.string.mode_anim_map),
-            new MenuProperty.Menu(MODE_ANIM_ROTATING_GRADIENT,  R.string.mode_anim_rotating_gradient),
-            new MenuProperty.Menu(MODE_ANIM_POLAR_GRADIENT,     R.string.mode_anim_polar_gradient),
-            new MenuProperty.Menu(MODE_ANIM_AZIMUTH_GRADIENT,   R.string.mode_anim_azimuth_gradient),
+            new MenuProperty.Menu(MODE_MANUAL,                              R.string.mode_manual),
+            new MenuProperty.Menu(MODE_SOLID,                               R.string.mode_solid),
+            new MenuProperty.Menu(MODE_ANIM_SOLID,                          R.string.mode_anim_solid),
+            new MenuProperty.Menu(MODE_ANIM_MAP,                            R.string.mode_anim_map),
+            new MenuProperty.Menu(MODE_ANIM_ROTATING_GRADIENT,              R.string.mode_anim_rotating_gradient),
+            new MenuProperty.Menu(MODE_ANIM_POLAR_GRADIENT,                 R.string.mode_anim_polar_gradient),
+            new MenuProperty.Menu(MODE_ANIM_AZIMUTH_GRADIENT,               R.string.mode_anim_azimuth_gradient),
+            new MenuProperty.Menu(MODE_ANIM_ROTATING_SEARCHLIGHT,           R.string.mode_anim_rotating_searchlight),
+            new MenuProperty.Menu(MODE_ANIM_ROTATING_SEARCHLIGHT_PALETTE,   R.string.mode_anim_rotating_searchlight_palette),
+            new MenuProperty.Menu(MODE_ANIM_TWINKLE,                        R.string.mode_anim_twinkle),
+            new MenuProperty.Menu(MODE_ANIM_GLITTER,                        R.string.mode_anim_glitter),
+            new MenuProperty.Menu(MODE_ANIM_SPRINKLE,                       R.string.mode_anim_sprinkle),
+            new MenuProperty.Menu(MODE_ANIM_SPOTLIGHTS,                     R.string.mode_anim_spotlights),
+            new MenuProperty.Menu(MODE_ANIM_SPOTLIGHTS_PALETTE,             R.string.mode_anim_spotlights_palette),
+            new MenuProperty.Menu(MODE_ANIM_POLICE,                         R.string.mode_anim_police),
     };
 
     public static final MenuProperty.Menu[] MENU_COLOR_PALETTE = new MenuProperty.Menu[]{
@@ -132,26 +147,46 @@ public abstract class Property<T> {
      * Returns if the given property should be shown considering the current mode
      */
     public static boolean shouldShowProperty(String propertyUUID){
+        Set<String> show = new HashSet<>();
+        // always visible
+        show.add(CHARACTERISTIC_ON_OFF);
+        show.add(CHARACTERISTIC_BRIGHTNESS);
+        show.add(CHARACTERISTIC_MODE);
+        // visible for certain modes only
         Property<?> modeProperty = Sphere2Lamp.getProperty(CHARACTERISTIC_MODE);
-        int mode = modeProperty == null ? 0 : modeProperty.getByte();
-        switch (propertyUUID.toUpperCase(Locale.ROOT)) {
-            default:
-            case CHARACTERISTIC_ON_OFF:
-            case CHARACTERISTIC_BRIGHTNESS:
-            case CHARACTERISTIC_MODE:
-                return true;
-            case CHARACTERISTIC_BPM:
-            case CHARACTERISTIC_COLOR_PALETTE:
-            case CHARACTERISTIC_TIME_FUNCTION:
-                return ANIMATION_MODES.contains(mode);
-            case CHARACTERISTIC_COLOR:
-                return mode == MODE_SOLID || mode == MODE_ANIM_MAP || mode == MODE_ANIM_AZIMUTH_GRADIENT;
-            case CHARACTERISTIC_LED_MAP:
-                return mode == MODE_ANIM_MAP;
-            case CHARACTERISTIC_SET_LED:
-            case CHARACTERISTIC_SET_ALL:
-                return mode == MODE_MANUAL;
+        switch (modeProperty == null ? 0 : modeProperty.getByte()) {
+            case MODE_MANUAL:
+                break;
+            case MODE_SOLID:
+                show.add(CHARACTERISTIC_COLOR);
+                break;
+            case MODE_ANIM_MAP:
+                show.addAll(Arrays.asList(CHARACTERISTIC_BPM, CHARACTERISTIC_COLOR_PALETTE, CHARACTERISTIC_TIME_FUNCTION, CHARACTERISTIC_LED_MAP));
+                break;
+            case MODE_ANIM_SOLID:
+            case MODE_ANIM_ROTATING_GRADIENT:
+            case MODE_ANIM_POLAR_GRADIENT:
+            case MODE_ANIM_ROTATING_SEARCHLIGHT_PALETTE:
+            case MODE_ANIM_SPOTLIGHTS_PALETTE:
+                show.addAll(Arrays.asList(CHARACTERISTIC_BPM, CHARACTERISTIC_COLOR_PALETTE, CHARACTERISTIC_TIME_FUNCTION));
+                break;
+            case MODE_ANIM_AZIMUTH_GRADIENT:
+                show.addAll(Arrays.asList(CHARACTERISTIC_BPM, CHARACTERISTIC_COLOR_PALETTE, CHARACTERISTIC_TIME_FUNCTION, CHARACTERISTIC_COLOR));
+                break;
+            case MODE_ANIM_ROTATING_SEARCHLIGHT:
+            case MODE_ANIM_GLITTER:
+            case MODE_ANIM_SPOTLIGHTS:
+                show.addAll(Arrays.asList(CHARACTERISTIC_BPM, CHARACTERISTIC_COLOR));
+                break;
+            case MODE_ANIM_TWINKLE:
+            case MODE_ANIM_SPRINKLE:
+                show.addAll(Arrays.asList(CHARACTERISTIC_BPM, CHARACTERISTIC_COLOR_PALETTE));
+                break;
+            case MODE_ANIM_POLICE:
+                show.add(CHARACTERISTIC_BPM);
+                break;
         }
+        return show.contains(propertyUUID.toUpperCase(Locale.ROOT));
     }
 
 

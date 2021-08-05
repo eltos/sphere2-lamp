@@ -59,5 +59,13 @@
     <string name="palette_lava">Lava</string>
     <string name="palette_rgb">Red-green-blue</string>
     <string name="enabling_bluetooth">Enabling bluetooth</string>
+    <string name="mode_anim_rotating_searchlight">Rotating searchlight animation</string>
+    <string name="mode_anim_rotating_searchlight_palette">Rotating searchlight animation (palette colors)</string>
+    <string name="mode_anim_twinkle">Twinkle animation</string>
+    <string name="mode_anim_glitter">Glitter animation</string>
+    <string name="mode_anim_sprinkle">Sprinkle animation</string>
+    <string name="mode_anim_spotlights">Spotlights animation</string>
+    <string name="mode_anim_spotlights_palette">Spotlights animation (palette color)</string>
+    <string name="mode_anim_police">Police light animation</string>
 
 </resources>
