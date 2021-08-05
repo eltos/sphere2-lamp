@@ -150,7 +150,7 @@ void serialEvent() {
           case ACTION_BPM: Serial.write(state.bpm); break;
           case ACTION_PALETTE: Serial.write(state.palette); break;
           case ACTION_TIME_FUNCTION: Serial.write(state.time_function); break;
-          case ACTION_COLOR: Serial.write(state.color.r); Serial.write(state.color.g); Serial.write(state.color.b); break;
+          case ACTION_COLOR: Serial.write(0); Serial.write(state.color.r); Serial.write(state.color.g); Serial.write(state.color.b); break;
           case ACTION_LED_MAP: Serial.write(state.led_map); break;
         }
       } break;

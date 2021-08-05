@@ -182,7 +182,7 @@ class Sphere2lamp:
         :return: red color component (0..255), green color component (0..255), blue color component (0..255)
         """
         self._send(ACTION_GET, ACTION_COLOR)
-        return list(self.ser.read(3))
+        return list(self.ser.read(4))[1:]
 
     def set_time_function(self, value):
         """Set the time function
