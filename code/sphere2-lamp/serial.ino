@@ -9,6 +9,8 @@
 #define ACTION_ON 1
 /* Set overall brightness. Payload: [uint8_t brightness] */
 #define ACTION_BRIGHTNESS 2
+/* Swich demo mode on/off. Payload: [uint8_t on_off] */
+#define ACTION_DEMO 3
 /* Set mode. Payload: [uint8_t mode_constant] (see main for list of modes) */
 #define ACTION_MODE 10
 /* Set animation speed in bpm. Payload: [uint8_t bpm] */
@@ -82,6 +84,11 @@ void serialEvent() {
         stateChanged();
       } break;
 
+    case ACTION_DEMO: // switch to demo mode
+      if (got(1)){
+        demo_mode = buf[0] > 0;
+      } break;
+
     case ACTION_MODE: // set mode
       if (got(1)){
         state.mode = buf[0];
@@ -146,6 +153,7 @@ void serialEvent() {
         switch (buf[0]) {
           case ACTION_ON: case ACTION_OFF: Serial.write(state.on ? 1 : 0); break;
           case ACTION_BRIGHTNESS: Serial.write(state.brightness); break;
+          case ACTION_DEMO: Serial.write(demo_mode ? 1 : 0); break;
           case ACTION_MODE: Serial.write(state.mode); break;
           case ACTION_BPM: Serial.write(state.bpm); break;
           case ACTION_PALETTE: Serial.write(state.palette); break;

@@ -23,6 +23,7 @@ public abstract class Property<T> {
 
     public static final String CHARACTERISTIC_ON_OFF =          "19B10001-E8F2-517E-4F6C-D104768A1214";
     public static final String CHARACTERISTIC_BRIGHTNESS =      "19B10002-E8F2-517E-4F6C-D104768A1214";
+    public static final String CHARACTERISTIC_DEMO =            "19B10003-E8F2-517E-4F6C-D104768A1214";
     public static final String CHARACTERISTIC_MODE =            "19B10010-E8F2-517E-4F6C-D104768A1214";
     public static final String CHARACTERISTIC_BPM =             "19B10011-E8F2-517E-4F6C-D104768A1214";
     public static final String CHARACTERISTIC_COLOR_PALETTE =   "19B10012-E8F2-517E-4F6C-D104768A1214";
@@ -121,6 +122,8 @@ public abstract class Property<T> {
                 return new SwitchProperty(characteristic, 1, R.string.switch_on_off);
             case CHARACTERISTIC_BRIGHTNESS:
                 return new ByteValueProperty(characteristic, 2, R.string.brightness, true);
+            case CHARACTERISTIC_DEMO:
+                return new SwitchProperty(characteristic, 90, R.string.demo_mode);
             case CHARACTERISTIC_MODE:
                 return new MenuProperty(characteristic, 3, R.string.mode, MENU_MODE);
             case CHARACTERISTIC_BPM:
@@ -134,9 +137,9 @@ public abstract class Property<T> {
             case CHARACTERISTIC_LED_MAP:
                 return new MenuProperty(characteristic, 5, R.string.led_pattern_map, MENU_LED_MAP);
             case CHARACTERISTIC_SET_LED:
-                return new RawProperty(characteristic, 90, R.string.single_led_color);
+                return new RawProperty(characteristic, 91, R.string.single_led_color);
             case CHARACTERISTIC_SET_ALL:
-                return new RawProperty(characteristic, 90, R.string.batch_led_color);
+                return new RawProperty(characteristic, 91, R.string.batch_led_color);
             default:
                 // Generic placeholder for unknown characteristics
                 return new RawProperty(characteristic, 100, R.string.unknown);

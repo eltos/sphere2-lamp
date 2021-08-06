@@ -11,6 +11,7 @@ import serial  # pip install pyserial
 ACTION_OFF = 0
 ACTION_ON = 1
 ACTION_BRIGHTNESS = 2
+ACTION_DEMO = 3
 ACTION_MODE = 10
 ACTION_BPM = 11
 ACTION_PALETTE = 12
@@ -133,6 +134,19 @@ class Sphere2lamp:
         """
         self._send(ACTION_GET, ACTION_BRIGHTNESS)
         return self.ser.read()[0]
+    
+    def set_demo_mode(self, enabled=True):
+        """En- or disables the demo mode
+        :param enabled: whether the demo mode should be active
+        """
+        self._send(ACTION_DEMO, 1 if enabled else 0)
+    
+    def get_demo_mode(self):
+        """Queries the demo mode enabled state
+        :return: whether the demo mode is active or not
+        """
+        self._send(ACTION_GET, ACTION_DEMO)
+        return self.ser.read()[0] > 0
     
     def set_mode(self, value):
         """Set the mode

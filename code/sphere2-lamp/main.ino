@@ -65,6 +65,7 @@ CRGBPalette16 palette_p = RainbowColors_p;
 uint8_t(*time_function_p)(accum88) = SAWTOOTH;
 uint8_t led_map_p[NUM_LEDS];
 bool led_map_bg_color = false;
+bool demo_mode = false;
 
 /**
  * Method to update run time settings from state
@@ -124,7 +125,7 @@ void recoverState(){
 
 
 
-/* 
+/*
  *  Main loop
  *  
  *  Runs animation functions etc. depending on the current state
@@ -190,14 +191,14 @@ void loop(){
 
       case MODE_ANIM_SPOTLIGHTS:
         fill_solid(leds, NUM_LEDS, state.color);
-        nscale8_video(leds, NUM_LEDS, 15);
+        nscale8_video(leds, NUM_LEDS, 10);
         anim_add_lava_blobs(state.color, state.bpm);
         break;
 
       case MODE_ANIM_SPOTLIGHTS_PALETTE: {
         CRGB color = ColorFromPalette(palette_p, time_function_p(scale8_video(state.bpm, 25)), 255, LINEARBLEND);
         fill_solid(leds, NUM_LEDS, color);
-        nscale8_video(leds, NUM_LEDS, 15);
+        nscale8_video(leds, NUM_LEDS, 10);
         anim_add_lava_blobs(color, state.bpm);
         break;
       }
@@ -206,6 +207,15 @@ void loop(){
         anim_police_lights(state.bpm);
         break;
       
+    }
+
+    // demo mode
+    if (demo_mode){
+      // cycle through demo states
+      EVERY_N_SECONDS(10){
+        next_demo_state();        
+        stateChanged();
+      }
     }
 
   } else { // Lamp OFF

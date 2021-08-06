@@ -12,6 +12,8 @@
 #define ACTION_ON 1
 /* Set overall brightness. Payload: [uint8_t brightness] */
 #define ACTION_BRIGHTNESS 2
+/* Swich demo mode on/off. Payload: [uint8_t on_off] */
+#define ACTION_DEMO 3
 /* Set mode. Payload: [uint8_t mode_constant] (see main for list of modes) */
 #define ACTION_MODE 10
 /* Set animation speed in bpm. Payload: [uint8_t bpm] */
@@ -39,6 +41,7 @@
 BLEService bleService                  ("19B10000-E8F2-517E-4F6C-D104768A1214"); 
 BLEByteCharacteristic cOnOff           ("19B10001-E8F2-517E-4F6C-D104768A1214", BLERead | BLEWrite); // BLEAuth
 BLEByteCharacteristic cBrightness      ("19B10002-E8F2-517E-4F6C-D104768A1214", BLERead | BLEWrite);
+BLEByteCharacteristic cDemo            ("19B10003-E8F2-517E-4F6C-D104768A1214", BLERead | BLEWrite);
 BLEByteCharacteristic cMode            ("19B10010-E8F2-517E-4F6C-D104768A1214", BLERead | BLEWrite);
 BLEByteCharacteristic cBpm             ("19B10011-E8F2-517E-4F6C-D104768A1214", BLERead | BLEWrite);
 BLEByteCharacteristic cPalette         ("19B10012-E8F2-517E-4F6C-D104768A1214", BLERead | BLEWrite);
@@ -53,6 +56,7 @@ BLECharacteristic     cSetAll          ("19B10102-E8F2-517E-4F6C-D104768A1214", 
 void setupCharacteristics(){
   bleService.addCharacteristic(cOnOff);               cOnOff.setEventHandler(BLEWritten, switchOnOffCallback);
   bleService.addCharacteristic(cBrightness);     cBrightness.setEventHandler(BLEWritten, actionCallback<ACTION_BRIGHTNESS>);
+  bleService.addCharacteristic(cDemo);                 cDemo.setEventHandler(BLEWritten, actionCallback<ACTION_DEMO>);
   bleService.addCharacteristic(cBpm);                   cBpm.setEventHandler(BLEWritten, actionCallback<ACTION_BPM>);
   bleService.addCharacteristic(cMode);                 cMode.setEventHandler(BLEWritten, actionCallback<ACTION_MODE>);
   bleService.addCharacteristic(cPalette);           cPalette.setEventHandler(BLEWritten, actionCallback<ACTION_PALETTE>);
@@ -68,6 +72,7 @@ void readAllCharacteristics(){
   // read out initial values
   queryCharacteristic<ACTION_ON>(cOnOff);
   queryCharacteristic<ACTION_BRIGHTNESS>(cBrightness);
+  queryCharacteristic<ACTION_DEMO>(cDemo);
   queryCharacteristic<ACTION_BPM>(cBpm);
   queryCharacteristic<ACTION_MODE>(cMode);
   queryCharacteristic<ACTION_PALETTE>(cPalette);

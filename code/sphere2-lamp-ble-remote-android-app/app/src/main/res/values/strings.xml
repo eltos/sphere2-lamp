@@ -67,5 +67,6 @@
     <string name="mode_anim_spotlights">Spotlights animation</string>
     <string name="mode_anim_spotlights_palette">Spotlights animation (palette color)</string>
     <string name="mode_anim_police">Police light animation</string>
+    <string name="demo_mode">Demo mode</string>
 
 </resources>
