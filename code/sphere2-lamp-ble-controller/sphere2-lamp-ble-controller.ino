@@ -55,30 +55,41 @@ BLECharacteristic     cSetAll          ("19B10102-E8F2-517E-4F6C-D104768A1214", 
 
 void setupCharacteristics(){
   bleService.addCharacteristic(cOnOff);               cOnOff.setEventHandler(BLEWritten, switchOnOffCallback);
+                                                      cOnOff.setEventHandler(BLERead,     queryCallback<ACTION_ON>);
   bleService.addCharacteristic(cBrightness);     cBrightness.setEventHandler(BLEWritten, actionCallback<ACTION_BRIGHTNESS>);
+                                                 cBrightness.setEventHandler(BLERead,     queryCallback<ACTION_BRIGHTNESS>);
   bleService.addCharacteristic(cDemo);                 cDemo.setEventHandler(BLEWritten, actionCallback<ACTION_DEMO>);
+                                                       cDemo.setEventHandler(BLERead,     queryCallback<ACTION_DEMO>);
   bleService.addCharacteristic(cBpm);                   cBpm.setEventHandler(BLEWritten, actionCallback<ACTION_BPM>);
+                                                        cBpm.setEventHandler(BLERead,     queryCallback<ACTION_BPM>);
   bleService.addCharacteristic(cMode);                 cMode.setEventHandler(BLEWritten, actionCallback<ACTION_MODE>);
+                                                       cMode.setEventHandler(BLERead,     queryCallback<ACTION_MODE>);
   bleService.addCharacteristic(cPalette);           cPalette.setEventHandler(BLEWritten, actionCallback<ACTION_PALETTE>);
+                                                    cPalette.setEventHandler(BLERead,     queryCallback<ACTION_PALETTE>);
   bleService.addCharacteristic(cTimeFunction); cTimeFunction.setEventHandler(BLEWritten, actionCallback<ACTION_TIME_FUNCTION>);
+                                               cTimeFunction.setEventHandler(BLERead,     queryCallback<ACTION_TIME_FUNCTION>);
   bleService.addCharacteristic(cColor);               cColor.setEventHandler(BLEWritten, actionCallback<ACTION_COLOR>);
+                                                      cColor.setEventHandler(BLERead,     queryCallback<ACTION_COLOR>);
   bleService.addCharacteristic(cLedMap);             cLedMap.setEventHandler(BLEWritten, actionCallback<ACTION_LED_MAP>);
+                                                     cLedMap.setEventHandler(BLERead,     queryCallback<ACTION_LED_MAP>);
   bleService.addCharacteristic(cSetLed);             cSetLed.setEventHandler(BLEWritten, actionCallback<ACTION_SET_LED>);
+  
   bleService.addCharacteristic(cSetAll);             cSetAll.setEventHandler(BLEWritten, actionCallback<ACTION_SET_ALL>);
 
 }
 
 void readAllCharacteristics(){
   // read out initial values
-  queryCharacteristic<ACTION_ON>(cOnOff);
-  queryCharacteristic<ACTION_BRIGHTNESS>(cBrightness);
-  queryCharacteristic<ACTION_DEMO>(cDemo);
-  queryCharacteristic<ACTION_BPM>(cBpm);
-  queryCharacteristic<ACTION_MODE>(cMode);
-  queryCharacteristic<ACTION_PALETTE>(cPalette);
-  queryCharacteristic<ACTION_TIME_FUNCTION>(cTimeFunction);
-  queryCharacteristic<ACTION_COLOR>(cColor);
-  queryCharacteristic<ACTION_LED_MAP>(cLedMap);
+  BLEDevice device = BLE.central();
+  queryCallback<ACTION_ON>(device, cOnOff);
+  queryCallback<ACTION_BRIGHTNESS>(device, cBrightness);
+  queryCallback<ACTION_DEMO>(device, cDemo);
+  queryCallback<ACTION_BPM>(device, cBpm);
+  queryCallback<ACTION_MODE>(device, cMode);
+  queryCallback<ACTION_PALETTE>(device, cPalette);
+  queryCallback<ACTION_TIME_FUNCTION>(device, cTimeFunction);
+  queryCallback<ACTION_COLOR>(device, cColor);
+  queryCallback<ACTION_LED_MAP>(device, cLedMap);
   
 }
 
@@ -173,10 +184,10 @@ void actionCallback(BLEDevice central, BLECharacteristic characteristic) {
 }
 
 /**
- * Generic method reading an action and setting the characteristic's value
+ * Generic callback reading an action and setting the characteristic's value
  */
 template <uint8_t ACTION>
-void queryCharacteristic(BLECharacteristic characteristic) {
+void queryCallback(BLEDevice central, BLECharacteristic characteristic) {
   query_action(ACTION, (uint8_t*) characteristic.value(), characteristic.valueSize());
 }
 
