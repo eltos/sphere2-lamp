@@ -164,7 +164,7 @@ public abstract class Property<T> {
                 show.add(CHARACTERISTIC_COLOR);
                 break;
             case MODE_ANIM_MAP:
-                show.addAll(Arrays.asList(CHARACTERISTIC_BPM, CHARACTERISTIC_COLOR_PALETTE, CHARACTERISTIC_TIME_FUNCTION, CHARACTERISTIC_LED_MAP));
+                show.addAll(Arrays.asList(CHARACTERISTIC_BPM, CHARACTERISTIC_COLOR_PALETTE, CHARACTERISTIC_TIME_FUNCTION, CHARACTERISTIC_LED_MAP, CHARACTERISTIC_COLOR));
                 break;
             case MODE_ANIM_SOLID:
             case MODE_ANIM_ROTATING_GRADIENT:
