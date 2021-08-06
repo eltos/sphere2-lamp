@@ -350,10 +350,11 @@ void anim_sprinkle(uint8_t bpm = 30, CRGBPalette16* palette = &defaultPalette, u
   EVERY_N_MILLISECONDS(10){
     fadeToBlackBy(leds, NUM_LEDS, 5);
   }
-  EVERY_N_MILLISECONDS(60000/n/bpm) {
+  EVERY_N_MILLIS_I(variableTimer, 0) {
     int pos = random16(NUM_LEDS);
     leds[pos] += ColorFromPalette(*palette, random8(), brightness, blending);
   }
+  variableTimer.setPeriod(60000/n/bpm);
 }
 
 
