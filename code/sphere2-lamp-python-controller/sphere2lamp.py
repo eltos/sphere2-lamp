@@ -270,17 +270,17 @@ if __name__ == '__main__':
     import time
     
     lamp = Sphere2lamp('COM6')
-    time.sleep(3) # arduino may be reset upon connection
+    time.sleep(3)  # arduino may be reset upon connection
         
     print('Lamp is', 'ON' if lamp.get_on() else 'OFF', 'and brightness at', lamp.get_brightness())
     print('Switching on with brightness 200...')
     lamp.set_on()
     lamp.set_brightness(200)
     lamp.set_mode(MODE_ANIM_MAP)
-    lamp.set_bpm(30);
-    lamp.set_time_function(TIME_FUNCTION_SAWTOOTH);
-    lamp.set_palette(PALETTE_DEFAULT_RAINBOW);
-    lamp.set_led_map(LED_MAP_PENTAGON);
+    lamp.set_bpm(30)
+    lamp.set_time_function(TIME_FUNCTION_SAWTOOTH)
+    lamp.set_palette(PALETTE_DEFAULT_RAINBOW)
+    lamp.set_led_map(LED_MAP_PENTAGON)
     lamp.set_color_rgb(0, 200, 0)
     
     print('Lamp is', 'ON' if lamp.get_on() else 'OFF', 'and brightness at', lamp.get_brightness())
