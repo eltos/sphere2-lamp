@@ -68,5 +68,9 @@
     <string name="mode_anim_spotlights_palette">Spotlights animation (palette color)</string>
     <string name="mode_anim_police">Police light animation</string>
     <string name="demo_mode">Demo mode</string>
+    <string name="palette_sunset">Sunset</string>
+    <string name="palette_grass">Grass</string>
+    <string name="palette_sky">Sky</string>
+    <string name="palette_crimson">Crimson</string>
 
 </resources>

@@ -7,44 +7,70 @@
  * Color palettes
  * (16 colors indexed as 0..255, must include both endpoints)
  * pre-defined palettes (http://fastled.io/docs/3.1/group___colorpalletes.html):
- *     RainbowColors_p, RainbowStripeColors_p, OceanColors_p, CloudColors_p, LavaColors_p, ForestColors_p, PartyColors_p
+ * 
+ *     RainbowColors_p          https://eltos.github.io/gradient/#RainbowColors_p=FF0000-D52A00-AB5500-AB7F00-ABAB00-56D500-00FF00-00D52A-00AB55-0056AA-0000FF-2A00D5-5500AB-7F0081-AB0055-D5002B
+ *     OceanColors_p            https://eltos.github.io/gradient/#OceanColors_p=191970-00008B-191970-000080-00008B-0000CD-2E8B57-008080-5F9EA0-0000FF-008B8B-6495ED-7FFFD4-2E8B57-00FFFF-87CEFA
+ *     LavaColors_p             https://eltos.github.io/gradient/#LavaColors_p=000000-800000-000000-800000-8B0000-800000-8B0000-8B0000-8B0000-FF0000-FFA500-FFFFFF-FFA500-FF0000-8B0000
+ *     ForestColors_p           https://eltos.github.io/gradient/#ForestColors_p=006400-006400-556B2F-006400-008000-228B22-6B8E23-008000-2E8B57-66CDAA-32CD32-9ACD32-32CD32-7CFC00-66CDAA-228B22
+ *     PartyColors_p            https://eltos.github.io/gradient/#PartyColors_p=5500AB-84007C-B5004B-E5001B-B84700-AB7700-ABAB00-DD2200-F2000E-C2003E-5F00A1-2F00D0-0007F9
+ *     RainbowStripeColors_p    
+ *     CloudColors_p            
  */
 CRGBPalette16 defaultPalette = RainbowColors_p;
- 
+
 DEFINE_GRADIENT_PALETTE( red_stripe_p ) {
+    /* Edit this gradient at https://eltos.github.io/gradient/#red_stripe_p=0:000000-42.4:000000-50.3:FF0000-58.2:000000-100:000000 */
     0,   0,  0,  0,   //black
   108,   0,  0,  0,   //black
   128, 255,  0,  0,   //red
   148,   0,  0,  0,   //black
   255,   0,  0,  0};  //black
 
-DEFINE_GRADIENT_PALETTE( four_p ) {
-    0, 255,  0,  0,   //
-   63,   0,  0,  0,   //
-   64, 255,  0,  0,   //
-  127,   0,  0,  0,   //
-  128, 255,  0,  0,   //
-  191,   0,  0,  0,   //
-  192, 255,255,255,   //
-  255,   0,  0,  0};  //black
+DEFINE_GRADIENT_PALETTE( sunset_p ){
+    /* Edit this gradient at https://eltos.github.io/gradient/#sunset_p=0:F7E000-20:F7A100-40:F75F00-60:F71D00-100:F7E000 */
+      0,  247, 224,   0,
+     51,  247, 161,   0,
+    102,  247,  95,   0,
+    153,  247,  29,   0,
+    255,  247, 224,   0};
 
-DEFINE_GRADIENT_PALETTE( dark_ocean_p ) {
-    0,   9,  95, 184,
-   55,  58, 114, 189,
-  105,  12, 178, 183,
-  140,  24, 110,  95,
-  190,  35,  34, 188,
-  230,  24, 102, 220,
-  255,   9,  95, 184};
+DEFINE_GRADIENT_PALETTE( dark_ocean_p ){
+    /* Edit this gradient at https://eltos.github.io/gradient/#dark_ocean_p=0965C4-0CBCC1-25A992-30649E-033076-201FAE-0965C4 */
+      0,    9, 101, 196,
+     42,   12, 188, 193,
+     85,   37, 169, 146,
+    127,   48, 100, 158,
+    170,    3,  48, 118,
+    212,   32,  31, 174,
+    255,    9, 101, 196};
+
+DEFINE_GRADIENT_PALETTE( grass_green_p ){
+    /* Edit this gradient at https://eltos.github.io/gradient/#grass_green_p=2FAD06-07AC5C-0B973D-4B8D26-70B300-2FAD06 */
+      0,   47, 173,   6,
+     51,    7, 172,  92,
+    102,   11, 151,  61,
+    153,   75, 141,  38,
+    204,  112, 179,   0,
+    255,   47, 173,   6};
+
+DEFINE_GRADIENT_PALETTE( crimson_red_p ){
+    /* Edit this gradient at https://eltos.github.io/gradient/#crimson_red_p=830900-740700-6F001E-6B0040-570755-830900 */
+      0,  131,   9,   0,
+     51,  116,   7,   0,
+    102,  111,   0,  30,
+    153,  107,   0,  64,
+    204,   87,   7,  85,
+    255,  131,   9,   0};
 
 DEFINE_GRADIENT_PALETTE( rgb_p ) {
-    0, 255,   0,   0,
-   43, 255,   0,   0,
-   85,   0, 255,   0,
-  128,   0, 255,   0,
-  171,   0,   0, 255,
-  213,   0,   0, 255,
-  255, 255,   0,   0};
+  /* Edit this gradient at https://eltos.github.io/gradient/#rgb_p=0:FF0000-16.7:FF0000-33.3:00FF00-50:00FF00-66.7:0000FF-83.3:0000FF-100:FF0000 */
+      0,  255,   0,   0,
+     42,  255,   0,   0,
+     85,    0, 255,   0,
+    127,    0, 255,   0,
+    170,    0,   0, 255,
+    212,    0,   0, 255,
+    255,  255,   0,   0};
 
 
 

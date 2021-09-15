@@ -31,6 +31,10 @@
 #define PALETTE_FOREST 4
 #define PALETTE_LAVA 5
 #define PALETTE_RGB 6
+#define PALETTE_SUNSET 7
+#define PALETTE_GRASS_GREEN 8
+#define PALETTE_SKY 9
+#define PALETTE_CRIMSON_RED 10
 
 #define TIME_FUNCTION_SAWTOOTH 0
 #define TIME_FUNCTION_SAWTOOTH_REVERSE 1
@@ -91,10 +95,14 @@ void stateChanged(){
     case PALETTE_DEFAULT_RAINBOW:           palette_p = RainbowColors_p;  break;
     case PALETTE_RED_STRIPE:                palette_p = red_stripe_p;     break;
     case PALETTE_PARTY:                     palette_p = PartyColors_p;    break;
-    case PALETTE_OCEAN:                     palette_p = OceanColors_p;    break;
+    case PALETTE_OCEAN:                     palette_p = dark_ocean_p;     break;
     case PALETTE_FOREST:                    palette_p = ForestColors_p;   break;
     case PALETTE_LAVA:                      palette_p = LavaColors_p;     break;
     case PALETTE_RGB:                       palette_p = rgb_p;            break;
+    case PALETTE_SUNSET:                    palette_p = sunset_p;         break;
+    case PALETTE_GRASS_GREEN:               palette_p = grass_green_p;    break;
+    case PALETTE_SKY:                       palette_p = OceanColors_p;    break;
+    case PALETTE_CRIMSON_RED:               palette_p = crimson_red_p;    break;
   }
   // led map
   switch (state.led_map){
