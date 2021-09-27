@@ -18,14 +18,19 @@ Instructions on how to build the lamp can be found in the [instructions](instruc
 
 ### Code
 
-The LED strip is driven by an Arduino Nano. The complete code is located in [code/sphere2-lamp](code/sphere2-lamp). It uses the [FastLED](https://github.com/FastLED/FastLED) library and features a serial interface to control the Sphere² Lamp.
+The LED strip is driven by an Arduino Nano which generates the colorful animations.
+The complete code is located in [code/sphere2-lamp](code/sphere2-lamp).
+It uses the [FastLED](https://github.com/FastLED/FastLED) library and features a modular serial interface to adjust the animation parameters or manually control the LEDs of the Sphere² Lamp.
 
-A simple python program to control the Sphere² Lamp over USB can be found in [code/sphere2-lamp-python-controller](code/sphere2-lamp-python-controller).  
+By connecting to the serial interface of the Arduino Nano, one can use:
+- A python program to control the Sphere² Lamp over USB from a computer.
+  The python class as well as a vpython based interactive 3D control UI can be found in [code/sphere2-lamp-python-controller](code/sphere2-lamp-python-controller).  
+- An Arduino Nano 33 BLE<sup>[[1]](#footnote-1)</sup> to control the Sphere² Lamp over **Bluetooth low energy (BLE)** from a smartphone.
+  The code for the BLE controller is located in [code/sphere2-lamp-ble-controller](code/sphere2-lamp-ble-controller).  
+  An compatible android app for control via BLE can be found in [code/sphere2-lamp-ble-remote-android-app](code/sphere2-lamp-ble-remote-android-app) and is also available from [Google Play](https://play.google.com/store/apps/details?id=com.github.eltos.sphere2lamp).
 
-For control via bluetooth low energy (BLE), an Arduino Nano 33 BLE is used. Since the FastLED library is not compatible with the Nano BLE as of now, it connects to the Nano via the serial interface. The code for the BLE controller is located in [code/sphere2-lamp-ble-controller](code/sphere2-lamp-ble-controller).
 
-An android app for control of the lamp via BLE can be found in [code/sphere2-lamp-ble-remote-android-app](code/sphere2-lamp-ble-remote-android-app) and is also available from [Google Play](https://play.google.com/store/apps/details?id=com.github.eltos.sphere2lamp).
-
+<a name="footnote-1">[1]</a>: Since the FastLED library is not compatible with the Nano BLE as of now, the Nano BLE provides only the Bluetooth interface and connects to the Nano (which controls the LEDs) via the serial interface. The benefit of this approach is a modular flexibility.
 
 ### License
 
