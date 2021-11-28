@@ -7,7 +7,7 @@
 
 
 
-# pip install serial numpy vpython
+# pip install pyserial numpy vpython
 import numpy as np
 import vpython as vp
 from math import *
@@ -197,3 +197,7 @@ color_paint = vp.checkbox(text='Paint upon select', bind=lambda e: None, checked
 
 
 
+
+while True:
+    vp.rate(100);
+    
