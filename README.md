@@ -2,7 +2,7 @@
 
 A spherical design lamp with 122 domes, illuminated by individually controlled RGB LEDs.
 Using animated color effects, the lamp creates a unique atmosphere.
-It can be controlled over USB or bluetooth.
+It can be controlled over USB or Bluetooth.
 
 
 ### Demo video
@@ -27,10 +27,19 @@ By connecting to the serial interface of the Arduino Nano, one can use:
   The python class as well as a vpython based interactive 3D control UI can be found in [code/sphere2-lamp-python-controller](code/sphere2-lamp-python-controller).  
 - An Arduino Nano 33 BLE<sup>[[1]](#footnote-1)</sup> to control the Sphere² Lamp over **Bluetooth low energy (BLE)** from a smartphone.
   The code for the BLE controller is located in [code/sphere2-lamp-ble-controller](code/sphere2-lamp-ble-controller).  
-  An compatible android app for control via BLE can be found in [code/sphere2-lamp-ble-remote-android-app](code/sphere2-lamp-ble-remote-android-app) and is also available from [Google Play](https://play.google.com/store/apps/details?id=com.github.eltos.sphere2lamp).
+  A compatible android app for control via BLE can be found in [code/sphere2-lamp-ble-remote-android-app](code/sphere2-lamp-ble-remote-android-app) and is also available from [Google Play](https://play.google.com/store/apps/details?id=com.github.eltos.sphere2lamp).
 
 
 <a name="footnote-1">[1]</a>: Since the FastLED library is not compatible with the Nano BLE as of now, the Nano BLE provides only the Bluetooth interface and connects to the Nano (which controls the LEDs) via the serial interface. The benefit of this approach is a modular flexibility.
+
+
+### Community
+
+A variation of the lamp using 3D printed hexagons was created by José Manuel González Martínez: https://www.instagram.com/p/CWn1fQyqXTM
+
+
+
+
 
 ### License
 
