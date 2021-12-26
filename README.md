@@ -35,7 +35,7 @@ By connecting to the serial interface of the Arduino Nano, one can use:
 
 ### Community
 
-A variation of the lamp using 3D printed hexagons was created by José Manuel González Martínes: https://www.instagram.com/p/CXEKfohqzcN
+A variation of the lamp using 3D printed hexagons was created by José Manuel González Martínez in 2021. Make sure to check it out on his [YouTube channel](https://youtu.be/2CoAVQVOjtA) and [Instagram](https://www.instagram.com/p/CXEKfohqzcN).
 
 
 
