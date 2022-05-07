@@ -37,7 +37,9 @@ By connecting to the serial interface of the Arduino Nano, one can use:
 
 A variation of the lamp using 3D printed hexagons was created by José Manuel González Martínez in 2021. Make sure to check it out on his [YouTube channel](https://youtu.be/2CoAVQVOjtA) and [Instagram](https://www.instagram.com/p/CXEKfohqzcN).
 
+The Arduino Team posted an article about this project on their [Blog](https://blog.arduino.cc/2021/08/11/this-lamp-consists-of-122-led-lit-domes-on-a-sphere-controllable-over-bluetooth/)
 
+You can also find this project on [Hackster](https://www.hackster.io/eltos/sphere-lamp-35d5f7) and the [Arduino Project HUB](https://create.arduino.cc/projecthub/eltos/sphere-lamp-35d5f7/)
 
 
 
