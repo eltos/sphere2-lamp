@@ -1,5 +1,6 @@
 package com.github.eltos.sphere2lamp;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -39,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements BleDeviceListDial
     private static final String PREF_DEVICE_ADDRESS = "PREF_DEVICE_ADDRESS";
 
     private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mAutoConnect = false;
     BroadcastReceiver mBluetoothBroadcastReceiver = new BroadcastReceiver() {
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements BleDeviceListDial
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);
@@ -137,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements BleDeviceListDial
 
 
 
+    @SuppressLint("MissingPermission")
     public void connect(boolean connectLastDevice){
         if (mBluetoothAdapter == null) {
             SimpleDialog.build().title(R.string.bluetooth_not_supported).msg(R.string.bluetooth_not_supported).show(this);
@@ -160,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements BleDeviceListDial
                         Sphere2Lamp.disconnect();
                         BleDeviceListDialog.build()
                                 .title(R.string.select_bluetooth_device)
+                                .serviceUUID(Sphere2Lamp.UUID_SERVICE.toString())
                                 //.filterable(true)
                                 .show(this, SELECT_BLE_DEVICE);
                     }
