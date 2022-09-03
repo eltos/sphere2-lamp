@@ -1,5 +1,6 @@
 package com.github.eltos.sphere2lamp;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.BluetoothLeScanner;
@@ -30,6 +31,7 @@ import eltos.simpledialogfragment.list.CustomListDialog;
 
 import static android.bluetooth.le.ScanSettings.SCAN_MODE_BALANCED;
 
+@SuppressLint("MissingPermission") // bluetooth permissions ensured by activity
 public class BleDeviceListDialog extends CustomListDialog<BleDeviceListDialog> {
 
     public static final String BLUETOOTH_DEVICE = "bluetooth_device";
@@ -103,17 +105,6 @@ public class BleDeviceListDialog extends CustomListDialog<BleDeviceListDialog> {
         mAutoStartScan = false;
 
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (bluetoothAdapter == null) {
-            Toast.makeText(getContext(), R.string.bluetooth_not_supported, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (!bluetoothAdapter.isEnabled()){
-            mAutoStartScan = true;
-            bluetoothAdapter.enable(); //startActivity(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
-            Toast.makeText(getContext(), R.string.enabling_bluetooth, Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         if (mBleScanner == null) {
             mBleScanner = bluetoothAdapter.getBluetoothLeScanner();

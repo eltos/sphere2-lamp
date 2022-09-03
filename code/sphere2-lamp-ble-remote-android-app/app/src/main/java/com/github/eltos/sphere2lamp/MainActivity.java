@@ -139,31 +139,30 @@ public class MainActivity extends AppCompatActivity implements BleDeviceListDial
 
     public void connect(boolean connectLastDevice){
         if (mBluetoothAdapter == null) {
-            Toast.makeText(this, R.string.bluetooth_not_supported, Toast.LENGTH_LONG).show();
+            SimpleDialog.build().title(R.string.bluetooth_not_supported).msg(R.string.bluetooth_not_supported).show(this);
 
         } else {
             if (ensurePermissions()){
-                SharedPreferences pref = getPreferences(Context.MODE_PRIVATE);
-                String address = pref.getString(PREF_DEVICE_ADDRESS, null);
-                
-                if (connectLastDevice && address != null && BluetoothAdapter.checkBluetoothAddress(address)) {
-                    if (!mBluetoothAdapter.isEnabled()){
-                        // enable bluetooth and proceed once enabled
-                        mAutoConnect = true;
-                        mBluetoothAdapter.enable();
-                        Toast.makeText(getContext(), R.string.enabling_bluetooth, Toast.LENGTH_SHORT).show();
-                    } else {
-                        // connect to known address
-                        Sphere2Lamp.connect(this, mBluetoothAdapter.getRemoteDevice(address));
-                    }
+                if (!mBluetoothAdapter.isEnabled()){
+                    // enable bluetooth and proceed once enabled
+                    mAutoConnect = true;
+                    startActivity(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
 
                 } else {
-                    // no known address, discover devices and let the user select one
-                    Sphere2Lamp.disconnect();
-                    BleDeviceListDialog.build()
-                            .title(R.string.select_bluetooth_device)
-                            //.filterable(true)
-                            .show(this, SELECT_BLE_DEVICE);
+                    SharedPreferences pref = getPreferences(Context.MODE_PRIVATE);
+                    String address = pref.getString(PREF_DEVICE_ADDRESS, null);
+                    if (connectLastDevice && address != null && BluetoothAdapter.checkBluetoothAddress(address)) {
+                        // connect to known address
+                        Sphere2Lamp.connect(this, mBluetoothAdapter.getRemoteDevice(address));
+
+                    } else {
+                        // no known address, discover devices and let the user select one
+                        Sphere2Lamp.disconnect();
+                        BleDeviceListDialog.build()
+                                .title(R.string.select_bluetooth_device)
+                                //.filterable(true)
+                                .show(this, SELECT_BLE_DEVICE);
+                    }
                 }
             }
         }
