@@ -15,6 +15,8 @@ https://player.vimeo.com/video/572701831
 
 Instructions on how to build the lamp can be found in the [instructions](instructions) folder.
 
+| [🪙 DONATE](https://github.com/sponsors/eltos) | [❤️ SAY THANKS](https://saythanks.io/to/eltos)
+|-|-|
 
 ### Code
 
